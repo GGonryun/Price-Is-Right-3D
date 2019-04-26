@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface IFloor
 {
-    Dictionary<Vector3, GameObject> generate(int numOfCubesInXDir, int numOfCubesInZDir);
+    Dictionary<Vector3, GameObject> Generate(int numOfCubesInXDir, int numOfCubesInZDir);
+    void SetPrefab(GameObject prefab);
 }

@@ -475,6 +475,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0301e3c0bb37afe46a74f2b97bc4c8a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numOfCubesInXDir: 40
+  numOfCubesInZDir: 40
 --- !u!4 &1218326970
 Transform:
   m_ObjectHideFlags: 0
@@ -535,8 +537,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f36c1527c9a92b47b4ee6852e31beca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numOfCubesInXDir: 100
-  numOfCubesInZDir: 100
 --- !u!4 &1503487447 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7472839793940615951, guid: d3a1c66d7f410ec41bfa9188ec4aea56,

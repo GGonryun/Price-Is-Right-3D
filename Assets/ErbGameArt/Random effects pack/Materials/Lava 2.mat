@@ -105,7 +105,7 @@ Material:
     - _Outlinestrench: 2
     - _Parallax: 0.02
     - _PowerOfLines: 1.512232
-    - _Relief: 2
+    - _Relief: 0.1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _Speed: -0.6751511
@@ -113,7 +113,7 @@ Material:
     - _SrcBlend: 1
     - _Strench: 0.05
     - _Strensh: 2
-    - _TextureChangespeed: 0.05
+    - _TextureChangespeed: 0
     - _TextureDistanse: 1
     - _TextureStrench: 1
     - _UVSec: 0

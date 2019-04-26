@@ -4,32 +4,16 @@ using UnityEngine;
 
 public class FloorGenerator : MonoBehaviour
 {
-    /*
-     * Declarations for Floor Size
-     */
-    [SerializeField]
-    private int numOfCubesInXDir;
-    [SerializeField]
-    private int numOfCubesInZDir;
     
-    /*
-     * Declaration to hold Floor of Cubes
-     */
-
     private IFloor generationStategy; 
-
-    public FloorGenerator(IFloor floorStrategy)
-    {
-        this.generationStategy = floorStrategy;
-    }
 
     public void SetGenerationStrategy(IFloor strategy)
     {
         this.generationStategy = strategy;
     }
     
-    public Dictionary<Vector3, GameObject> GenerateFloor()
+    public Dictionary<Vector3, GameObject> GenerateFloor(int numOfCubesInXDir, int numOfCubesInZDir)
     {
-        return generationStategy.generate(numOfCubesInXDir, numOfCubesInZDir);
+        return generationStategy.Generate(numOfCubesInXDir, numOfCubesInZDir);
     }
 }

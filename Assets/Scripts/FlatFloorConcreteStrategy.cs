@@ -5,9 +5,14 @@ using UnityEngine;
 
 public class FlatFloorConcreteStrategy : MonoBehaviour, IFloor
 {
-    GameObject cubePrefab = Resources.Load<GameObject>("Assets/Resources/Prefabs/Cube.prefab");
+    private GameObject cubePrefab;
 
-    public Dictionary<Vector3, GameObject> generate(int numOfCubesInXDir, int numOfCubesInZDir)
+    void Awake()
+    {
+        //cubePrefab = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        // Resources.Load<GameObject>("/Assets/Resources/Prefabs/Cube") as GameObject;
+    }
+    public Dictionary<Vector3, GameObject> Generate(int numOfCubesInXDir, int numOfCubesInZDir)
     {
         return InstanciateCubes(numOfCubesInXDir, numOfCubesInZDir);
     }
@@ -23,6 +28,7 @@ public class FlatFloorConcreteStrategy : MonoBehaviour, IFloor
             {
                Vector3 tempVector3 = CreateVector3(currXIndex, currZIndex);
                GameObject cube = CreateGameObject(tempVector3);
+               Debug.Log("Created cube at " +tempVector3);
                floorOfCubes[tempVector3] = cube;
             }
         }
@@ -31,7 +37,6 @@ public class FlatFloorConcreteStrategy : MonoBehaviour, IFloor
 
     private Vector3 CreateVector3(int xCoord, int zCoord)
     {
-
         return new Vector3(xCoord, 0, zCoord);
     }
 
@@ -41,5 +46,8 @@ public class FlatFloorConcreteStrategy : MonoBehaviour, IFloor
         return cube;
     }
 
-    
+    public void SetPrefab(GameObject prefab)
+    {
+        this.cubePrefab = prefab;
+    }
 }
