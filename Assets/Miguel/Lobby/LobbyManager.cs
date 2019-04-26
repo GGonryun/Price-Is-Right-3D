@@ -53,11 +53,20 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         SetActivePanel(loginPanel.name);
     }
 
-    private void Start()
+    public override void OnEnable()
     {
+        base.OnEnable();
         loginButton.onClick.AddListener(OnClickLogin);
         joinRoomButton.onClick.AddListener(OnClickJoin);
         enterGameButton.onClick.AddListener(OnClickEnter);
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        loginButton.onClick.RemoveListener(OnClickLogin);
+        joinRoomButton.onClick.RemoveListener(OnClickJoin);
+        enterGameButton.onClick.RemoveListener(OnClickEnter);
     }
     #endregion UNITY CALLBACKS
 
@@ -146,7 +155,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
-        //PhotonNetwork.LoadLevel();
+        PhotonNetwork.LoadLevel("Game");
     }
     #endregion UI CALLBACKS
 
