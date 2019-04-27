@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Asteroid.cs" company="Exit Games GmbH">
 //   Part of: Asteroid Demo
 // </copyright>
@@ -107,7 +107,6 @@ namespace Photon.Pun.Demo.Asteroids
                     PhotonNetwork.InstantiateSceneObject("SmallAsteroid", transform.position + force.normalized * 10.0f, Quaternion.Euler(0, Random.value * 180.0f, 0), 0, instantiationData);
                 }
             }
-
             PhotonNetwork.Destroy(gameObject);
         }
 

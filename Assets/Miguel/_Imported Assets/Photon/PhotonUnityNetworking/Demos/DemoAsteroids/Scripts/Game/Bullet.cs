@@ -1,4 +1,4 @@
-﻿using Photon.Realtime;
+using Photon.Realtime;
 using UnityEngine;
 
 namespace Photon.Pun.Demo.Asteroids
