@@ -11,15 +11,18 @@ public class GameManager : MonoBehaviourPunCallbacks
     [Header("User Interface")]
     [Tooltip("")]
     [SerializeField]
-    private Button exit;
+    private Button exit = null;
 
     #region UNITY CALLBACKS
-   
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         StartGame();
     }
-
     #endregion UNITY CALLBACKS
 
     #region PUN CALLBACKS
@@ -78,6 +81,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Starting the game ... ");
     }
-
     #endregion UTILITY
+
+    public static GameManager Instance;
+
 }

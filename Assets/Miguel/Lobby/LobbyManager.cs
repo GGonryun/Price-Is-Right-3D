@@ -215,7 +215,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     #endregion
 
-
     #region PRIVATE
     private const string _version = "1";
     private const short _errorRoomDoesNotExist = 32760;

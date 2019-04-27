@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+        <SnippetType>SurroundsWith</SnippetType>
+      </SnippetTypes>
+      <Title>DebugError</Title>
+      <Author>Miguel Campos</Author>
+      <Description>Creates a quick debug error statement for the console.</Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>debugerror</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>object</ID>
+          <ToolTip>The name of our current class.</ToolTip>
+          <Default>object</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>message</ID>
+          <ToolTip>The error message to display.</ToolTip>
+          <Default>message</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp" Delimiter="$"><![CDATA[Debug.LogError("<Color=Red> $object$ <a></a></Color>$message$ !! ", this); $end$]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
