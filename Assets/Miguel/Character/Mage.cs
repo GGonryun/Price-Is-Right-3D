@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(CameraWork))]
 public class Mage : MonoBehaviourPunCallbacks, IPunObservable
 {
     #region UNITY CALLBACKS
@@ -68,7 +69,7 @@ public class Mage : MonoBehaviourPunCallbacks, IPunObservable
 
     #endregion PUN CALLBACKS
 
-    #region UTILITY
+    #region PRIVATES
 
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode loadingMode)
     {
@@ -86,9 +87,9 @@ public class Mage : MonoBehaviourPunCallbacks, IPunObservable
     {
         Debug.Log("Throw fireball!");
     }
-    #endregion UTILITY
+
 
     private bool dead = false;
     private CameraWork cameraWork = null;
-
+    #endregion UTILITY
 }

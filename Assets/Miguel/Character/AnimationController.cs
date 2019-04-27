@@ -31,10 +31,9 @@ public class AnimationController : MonoBehaviourPun
     }
     #endregion UNITY CALLBACKS
 
-
     #region PRIVATES
     /// <param name="input">Horizontal = x, Vertical = y</param>
-    public void PlayerInput()
+    private void PlayerInput()
     {
         bool attack = Input.GetButtonDown("Fire2");
         float h = Input.GetAxis("Horizontal");
@@ -45,9 +44,11 @@ public class AnimationController : MonoBehaviourPun
 
         animator.SetBool("Moving", (speed > 0f) ? true : false);
 
-        Rotate(h);
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Attack1")) {
+            Rotate(h);
+        }
 
-        if(attack)
+        if (attack)
         {
             Debug.Log($"Attacking: {PhotonNetwork.LocalPlayer.NickName}");
             animator.SetTrigger("Attack1Trigger");
@@ -63,7 +64,7 @@ public class AnimationController : MonoBehaviourPun
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, this.turningPower * Time.deltaTime);
     }
 
+    private Animator animator = null;
     #endregion PRIVATES
 
-    private Animator animator = null;
 }

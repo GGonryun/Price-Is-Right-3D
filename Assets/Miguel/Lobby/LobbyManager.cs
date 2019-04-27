@@ -160,7 +160,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
     #endregion UI CALLBACKS
 
-    #region UTILITY
+    #region PRIVATES
     private void SetActivePanel(string name)
     {
         loginPanel.SetActive(name.Equals(loginPanel.name));
@@ -214,11 +214,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         playerList.Remove(playerName);
     }
 
-    #endregion
 
-    #region PRIVATE
     private const string _version = "1";
     private const short _errorRoomDoesNotExist = 32760;
     [System.NonSerialized] private Dictionary<string, Text> playerList = new Dictionary<string, Text>(8);
-    #endregion PRIVATE
+    #endregion PRIVATES
 }
