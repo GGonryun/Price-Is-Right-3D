@@ -39,8 +39,11 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetButtonUp("Fire1")){
 			Instantiate(spells[0], transform.position, transform.rotation);
 		}
+
+		// shield
 		if (Input.GetButtonUp("Fire2")){
-			Instantiate(spells[1], transform.position, transform.rotation);
+			GameObject shield = Instantiate(spells[1], transform.position, transform.rotation);
+			shield.GetComponent<ShieldController>().Bind(gameObject);
 		}
 	}
 
