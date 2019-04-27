@@ -5,7 +5,10 @@ using System.Collections;
 public class ImpactReceiver : MonoBehaviour {
 
 	// Use this for initialization
-	public float forceApplied = 1f;
+
+	// this is like health
+	public float multiplier = 1.01f;
+	public float incrementAmount = 10f;
 	void Start () {
 		
 	}
@@ -21,7 +24,8 @@ public class ImpactReceiver : MonoBehaviour {
 		if (col.tag == "Spells"){
 			Debug.Log("SPELL COLLISION");
 			Vector3 moveDirection = transform.position - col.transform.position;
-			gameObject.GetComponent<Rigidbody>().AddForce (moveDirection * forceApplied);
+			gameObject.GetComponent<Rigidbody>().AddForce (moveDirection * col.GetComponent<SpellController>().force * multiplier);
+			multiplier += col.GetComponent<SpellController>().damage * 0.01f;
 		}
 	}
 }
