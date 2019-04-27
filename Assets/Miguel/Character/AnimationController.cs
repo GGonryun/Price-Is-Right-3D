@@ -21,21 +21,37 @@ public class AnimationController : MonoBehaviourPun
         Animator.StringToHash("Moving");
         Animator.StringToHash("Input X");
     }
+
+    private void Update()
+    {
+        if (photonView.IsMine)
+        {
+            PlayerInput();
+        }
+    }
     #endregion UNITY CALLBACKS
+
 
     #region PRIVATES
     /// <param name="input">Horizontal = x, Vertical = y</param>
-    public void PlayerInput(Vector2 input)
+    public void PlayerInput()
     {
-        float speed = (new Vector2(input.x, input.y).sqrMagnitude);
+        bool attack = Input.GetButtonDown("Fire2");
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+        if (v < 0)
+            v = 0;
+        float speed = (new Vector2(h, v).sqrMagnitude);
 
         animator.SetBool("Moving", (speed > 0f) ? true : false);
 
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Run"))
+        Rotate(h);
+
+        if(attack)
         {
-            Rotate(input.x);
+            Debug.Log($"Attacking: {PhotonNetwork.LocalPlayer.NickName}");
+            animator.SetTrigger("Attack1Trigger");
         }
-        Attack();
     }
 
     private void Rotate(float h)
@@ -47,13 +63,6 @@ public class AnimationController : MonoBehaviourPun
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, this.turningPower * Time.deltaTime);
     }
 
-    private void Attack()
-    {
-        if (Input.GetButtonDown("Fire2"))
-        {
-            animator.SetTrigger("Attack1Trigger");
-        }
-    }
     #endregion PRIVATES
 
     private Animator animator = null;

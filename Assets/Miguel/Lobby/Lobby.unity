@@ -403,7 +403,7 @@ MonoBehaviour:
   loginPanel: {fileID: 1101889051}
   playerNameInputField: {fileID: 1851245629}
   loginButton: {fileID: 456527121}
-  maxPlayers: 3
+  maxPlayers: 5
   maxRooms: 1
   joinRoomPanel: {fileID: 177067901}
   joinRoomButton: {fileID: 1175751951}

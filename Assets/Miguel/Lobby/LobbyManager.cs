@@ -84,7 +84,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.LogWarning($"{returnCode}: PUN says: {message} . ");
+        Debug.LogError($"{returnCode}: PUN says: {message} . ");
 
         if (returnCode == _errorRoomDoesNotExist)
         {
@@ -153,9 +153,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public void OnClickEnter()
     {
-        PhotonNetwork.CurrentRoom.IsOpen = false;
-        PhotonNetwork.CurrentRoom.IsVisible = false;
-        PhotonNetwork.LoadLevel("Game");
+        if(PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("Game");
+        }
     }
     #endregion UI CALLBACKS
 
@@ -169,7 +170,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     private void CreateRoom()
     {
-        if (PhotonNetwork.CountOfRooms >= maxRooms)
+        if (PhotonNetwork.CountOfRooms > maxRooms)
         {
             Debug.LogWarning($"Cannot create more rooms ! ");
             return;

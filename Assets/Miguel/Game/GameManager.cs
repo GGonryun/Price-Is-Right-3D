@@ -8,10 +8,15 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+
     [Header("User Interface")]
     [Tooltip("")]
     [SerializeField]
     private Button exit = null;
+
+    [Tooltip("")]
+    [SerializeField]
+    private GameObject playerPrefab = null;
 
     #region UNITY CALLBACKS
     private void Awake()
@@ -22,6 +27,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         StartGame();
+
+        if (!playerPrefab)
+            Debug.LogError("<Color=Red> GameManager <a></a></Color>is missing a player prefab !! ", this);
+        else
+            PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
     }
     #endregion UNITY CALLBACKS
 
@@ -30,6 +40,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         base.OnEnable();
         exit.onClick.AddListener(OnClickLeave);
+        PhotonNetwork.CurrentRoom.IsOpen = false;
     }
 
     public override void OnDisable()
@@ -49,10 +60,19 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             Debug.Log($"MasterClient -- {newPlayer} has joined ! ");
+            LoadArena();
         }
         else
         {
             Debug.Log($"PUN -- {newPlayer} has joined ! ");
+        }
+    }
+
+    void LoadArena()
+    {
+        if(PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("Game");
         }
     }
 

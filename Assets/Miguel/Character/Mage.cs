@@ -2,21 +2,17 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Mage : MonoBehaviourPun, IPunObservable
+public class Mage : MonoBehaviourPunCallbacks, IPunObservable
 {
     #region UNITY CALLBACKS
     private void Awake()
-    {
-        animationController = GetComponent<AnimationController>();
-        if (!animationController)
-            Debug.LogError("<Color=Red> Mage <a></a></Color> has no component named AnimationController !! ", this);
-
+    { 
         cameraWork = GetComponent<CameraWork>();
         if (!cameraWork)
             Debug.LogError("<Color=Red> Mage <a></a></Color>has no component named CameraWork !! ", this);
     }
-
 
     private void Start()
     {
@@ -25,26 +21,14 @@ public class Mage : MonoBehaviourPun, IPunObservable
             cameraWork.OnStartFollowing();
         }
     }
+
     private void Update()
     {
         if (dead == true)
             GameManager.Instance.OnClickLeave();
 
-        if (photonView.IsMine)
-        {
-            PlayerInput();
-        }
     }
 
-    private void PlayerInput()
-    {
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
-        if (v < 0)
-            v = 0;
-
-        animationController.PlayerInput(new Vector2(h, v));
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -69,27 +53,42 @@ public class Mage : MonoBehaviourPun, IPunObservable
             dead = (bool)stream.ReceiveNext();
         }
     }
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     #endregion PUN CALLBACKS
 
     #region UTILITY
-    void FootL()
+
+    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode loadingMode)
     {
-        Debug.Log("FootL");
+        if (!Physics.Raycast(transform.position, -Vector3.up, 5f))
+        {
+            transform.position = new Vector3(0f, 5f, 0f);
+        }
     }
 
-    void FootR()
-    {
-        Debug.Log("FootR");
-    }
+    private void FootL() { }
 
-    void Hit()
+    private void FootR() { }
+
+    private void Hit()
     {
         Debug.Log("Throw fireball!");
     }
     #endregion UTILITY
 
     private bool dead = false;
-    private AnimationController animationController = null;
     private CameraWork cameraWork = null;
 
 }
