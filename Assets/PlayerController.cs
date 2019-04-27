@@ -42,7 +42,9 @@ public class PlayerController : MonoBehaviour {
 
 		// shield
 		if (Input.GetButtonUp("Fire2")){
-			GameObject shield = Instantiate(spells[1], transform.position, transform.rotation);
+			Quaternion rotation = transform.rotation;
+			rotation.y -= 90f;
+			GameObject shield = Instantiate(spells[1], transform.position, rotation);
 			shield.GetComponent<ShieldController>().Bind(gameObject);
 		}
 	}
