@@ -5,20 +5,14 @@ using UnityEngine;
 
 public class Spell : MonoBehaviour
 {
-    public Player Owner { get; private set; }
+    [Tooltip("Duration")]
+    [SerializeField]
+    private float delay = 3.0f;
 
+    #region UNITY CALLBACKS
     public void Start()
     {
-        Destroy(gameObject, 3.0f);
+        Destroy(gameObject, delay);
     }
-
-    public void OnCollisionEnter(Collision collision)
-    {
-        Destroy(gameObject);
-    }
-
-    public void Initialize(Player owner)
-    {
-        Owner = owner;
-    }
+    #endregion UNITY CALLBACKS
 }

@@ -44,15 +44,11 @@ public class AnimationController : MonoBehaviourPun
 
         animator.SetBool("Moving", (speed > 0f) ? true : false);
 
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Attack1")) {
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Attack1")) 
             Rotate(h);
-        }
 
         if (attack)
-        {
-            //Debug.Log($"Attacking: {PhotonNetwork.LocalPlayer.NickName}");
             animator.SetTrigger("Attack1Trigger");
-        }
     }
 
     private void Rotate(float h)

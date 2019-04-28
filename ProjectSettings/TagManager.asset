@@ -4,8 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Bullet
-  - Spells
+  - Deadzone
+  - Floor
+  - Spell
   layers:
   - Default
   - TransparentFX

@@ -170,7 +170,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     private void CreateRoom()
     {
-        if (PhotonNetwork.CountOfRooms > maxRooms)
+        if (PhotonNetwork.CountOfRooms >= maxRooms)
         {
             Debug.LogWarning($"Cannot create more rooms ! ");
             return;
