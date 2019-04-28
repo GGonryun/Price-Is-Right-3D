@@ -9,6 +9,13 @@ public class Spell : MonoBehaviour
     [SerializeField]
     private float delay = 3.0f;
 
+    public Player Owner { get; private set; }
+
+    public static void Link(Spell spell, Player owner)
+    {
+        spell.Owner = owner;
+    }
+
     #region UNITY CALLBACKS
     public void Start()
     {

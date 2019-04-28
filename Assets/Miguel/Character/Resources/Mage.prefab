@@ -115,6 +115,7 @@ MonoBehaviour:
   spellPrefab: {fileID: 1987054487506206, guid: a7f3d194c8a20364485700aaf7b07050,
     type: 3}
   spawnPoint: {fileID: 3700898650571438579}
+  mageUI: {fileID: 6839485732336230915, guid: d06f8a38fc3a9a4479c4ae1ba28627b0, type: 3}
 --- !u!114 &1501828745086417928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,6 +282,10 @@ PrefabInstance:
       propertyPath: m_ApplyRootMotion
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9590292, guid: bad0018eb9256e6409155981dd5af9a2, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 36031cbacca4e3f4eaced81efcc51c0c, type: 2}
     - target: {fileID: 400000, guid: bad0018eb9256e6409155981dd5af9a2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

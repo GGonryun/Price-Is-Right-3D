@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class ImpactDetector : MonoBehaviourPun, IPunObservable
 {
+    public float Multiplier => multiplier;
+    public float Height => characterController.height;
+
     #region UNITY CALLBACKS
     private void Awake()
     {
@@ -46,6 +49,7 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
         heading.y *= 0f;
 
         //Increase the knockback multiplier.
+        multiplier += .5f;
         AddKnockback(heading, baseKnockback * multiplier);
     }
     #endregion UNITY CALLBACKS

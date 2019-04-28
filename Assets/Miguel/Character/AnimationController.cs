@@ -44,6 +44,8 @@ public class AnimationController : MonoBehaviourPun
 
         animator.SetBool("Moving", (speed > 0f) ? true : false);
 
+        //TODO: ADD SPRINTING
+
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Attack1")) 
             Rotate(h);
 
