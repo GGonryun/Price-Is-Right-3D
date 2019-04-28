@@ -50,7 +50,7 @@ public class AnimationController : MonoBehaviourPun
 
         if (attack)
         {
-            Debug.Log($"Attacking: {PhotonNetwork.LocalPlayer.NickName}");
+            //Debug.Log($"Attacking: {PhotonNetwork.LocalPlayer.NickName}");
             animator.SetTrigger("Attack1Trigger");
         }
     }

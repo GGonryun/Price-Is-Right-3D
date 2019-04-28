@@ -17,14 +17,8 @@ public class Spell : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void Initialize(Player owner, Vector3 originalDirection, float lag)
+    public void Initialize(Player owner)
     {
         Owner = owner;
-
-        transform.forward = originalDirection;
-
-        Rigidbody rigidbody = GetComponent<Rigidbody>();
-        rigidbody.velocity = originalDirection * 200.0f;
-        rigidbody.position += rigidbody.velocity * lag;
     }
 }

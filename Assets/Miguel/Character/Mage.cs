@@ -11,10 +11,9 @@ public class Mage : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField]
     private GameObject spellPrefab;
 
-
     #region UNITY CALLBACKS
     private void Awake()
-    { 
+    {
         cameraWork = GetComponent<CameraWork>();
         if (!cameraWork)
             Debug.LogError("<Color=Red> Mage <a></a></Color>has no component named CameraWork !! ", this);
@@ -44,20 +43,24 @@ public class Mage : MonoBehaviourPunCallbacks, IPunObservable
         dead = true;
     }
     #endregion UNITY CALLBACKS
-    [PunRPC]
-    public void FireSpell(Vector3 position, Quaternion rotation, PhotonMessageInfo info)
-    {
-        Debug.Log($"Send Firespell: {position}, {rotation}");
-        Debug.Log($"Photon Message: {info.Sender}, {info.photonView}, {info.SentServerTime}");
-    }
 
     private void Hit()
     {
-        photonView.RPC("FireSpell", RpcTarget.AllViaServer, transform.position, transform.rotation);
+        if (photonView.IsMine)
+        {
+            photonView.RPC("FireSpell", RpcTarget.AllViaServer, transform.position, transform.rotation);
+        }
     }
 
+    [PunRPC]
+    public void FireSpell(Vector3 position, Quaternion rotation, PhotonMessageInfo info)
+    {
+        float lag = (float)(PhotonNetwork.Time - info.SentServerTime);
+        GameObject spell = Instantiate(spellPrefab, position, rotation) as GameObject;
+        spell.GetComponent<Spell>().Initialize(photonView.Owner);
+    }
     #region PUN CALLBACKS
-    
+
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -98,18 +101,6 @@ public class Mage : MonoBehaviourPunCallbacks, IPunObservable
     private void FootL() { }
 
     private void FootR() { }
-
-
-
-
-
-    //private void Fire()
-    //{
-    //    float lag = (float)(PhotonNetwork.Time - info.SentServerTime);
-
-    //    GameObject go = Instantiate(spell, transform.position, Quaternion.identity, this.transform);
-    //    go.GetComponent<Spell>().Initialize(photonView.Owner, (rotation * Vector3.forward));
-    //}
 
     private float cooldown = 0.0f;
     private bool dead = false;
