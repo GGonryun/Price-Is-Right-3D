@@ -45,6 +45,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private Text playerNameTextPrefab = null;
 
+    [Header("Testing Character Select Panel")]
+    [Tooltip("")]
+    [SerializeField]
+    private Dropdown characterSelectDropdown;
+
     #region UNITY CALLBACKS
     private void Awake()
     {
@@ -59,6 +64,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         loginButton.onClick.AddListener(OnClickLogin);
         joinRoomButton.onClick.AddListener(OnClickJoin);
         enterGameButton.onClick.AddListener(OnClickEnter);
+        characterSelectDropdown.onValueChanged.AddListener(OnCharacterSelected);
     }
 
     public override void OnDisable()
@@ -67,7 +73,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         loginButton.onClick.RemoveListener(OnClickLogin);
         joinRoomButton.onClick.RemoveListener(OnClickJoin);
         enterGameButton.onClick.RemoveListener(OnClickEnter);
+        characterSelectDropdown.onValueChanged.RemoveListener(OnCharacterSelected);
+
     }
+
+    
     #endregion UNITY CALLBACKS
 
     #region PUN CALLBACKS
@@ -158,6 +168,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             PhotonNetwork.LoadLevel("Game");
         }
     }
+
+    public void OnCharacterSelected(int index) => Settings.Instance.Character = Characters.Get(characterSelectDropdown.options[index].text);
     #endregion UI CALLBACKS
 
     #region PRIVATES

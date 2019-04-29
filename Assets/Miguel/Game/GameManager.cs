@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private Button exit = null;
 
+    [Header]
     [Tooltip("")]
     [SerializeField]
     private GameObject playerPrefab = null;
@@ -24,6 +25,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         Instance = this;
     }
 
+    /// <summary>
+    /// In order to spawn a character, prefab must have the same name as the Character Selections in Settings.
+    /// </summary>
     private void Start()
     {
         StartGame();
@@ -31,7 +35,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (!playerPrefab)
             Debug.LogError("<Color=Red> GameManager <a></a></Color>is missing a player prefab !! ", this);
         else
-            PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+            PhotonNetwork.Instantiate(Settings.Instance.Character.ToString(), new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
     }
     #endregion UNITY CALLBACKS
 
@@ -70,7 +74,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void LoadArena()
     {
-        if(PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.LoadLevel("Game");
         }
