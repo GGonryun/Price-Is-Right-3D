@@ -14,14 +14,15 @@ public class ShrinkFloorStrategy : MonoBehaviour, IFloorDestroyer
     private int maxBoundZCoord;
     private int maxBoundZCoordLimit;
 
-    private int colorDelay = 0;
-    private int intermediateDelay = 3;
-    private int iterationDelay = 2;
+    private readonly int colorDelay = 0;
+    private readonly int intermediateDelay = 3;
+    private readonly int iterationDelay = 2;
 
     private List<GameObject> listOfSelectedCubes = new List<GameObject>(10);
 
-    public void Destroy(int numOfCubesInXDir, int numOfCubesInZDir, Dictionary<Vector3, GameObject> floor)
+    public void Destroy(int numOfCubesInXDir, int numOfCubesInZDir, Dictionary<Vector3, GameObject> floor, List<Vector3> cubesToDestroy)
     {
+        // Ignore cubesToDestroy for this strategy, the object will have a null value
         InitializeBounds(numOfCubesInXDir, numOfCubesInZDir);
         StartCoroutine(DestroyFloorWithTimer(numOfCubesInXDir, numOfCubesInZDir, floor));
     }
@@ -38,12 +39,17 @@ public class ShrinkFloorStrategy : MonoBehaviour, IFloorDestroyer
                     if (currentZIdx == minBoundZCoord || currentZIdx == maxBoundZCoord-1)
                     {
                         Vector3 tempVector3 = CreateVector3(currentXIdx, currentZIdx);
-                        listOfSelectedCubes.Add(floor[tempVector3]);
+                        if(floor[tempVector3].activeSelf == true) {
+                            listOfSelectedCubes.Add(floor[tempVector3]);
+                        }
                     }
                     else if(currentXIdx == minBoundXCoord || currentXIdx == maxBoundXCoord-1 )
                     {
                         Vector3 tempVector3 = CreateVector3(currentXIdx, currentZIdx);
-                        listOfSelectedCubes.Add(floor[tempVector3]);
+                        if (floor[tempVector3].activeSelf == true)
+                        {
+                            listOfSelectedCubes.Add(floor[tempVector3]);
+                        }
                     }
                 }
             }
@@ -61,6 +67,7 @@ public class ShrinkFloorStrategy : MonoBehaviour, IFloorDestroyer
             {
                 GameObject go = listOfSelectedCubes[idxNum];
                 go.SendMessage("ApplyGravity");
+                go.SendMessage("UnfreezeConstraints");
                 yield return null; //wait 1 frame `yield return new WaitForEndOfFrame()`
             }
             
