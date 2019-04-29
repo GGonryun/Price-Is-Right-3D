@@ -120,12 +120,29 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 2
   m_Height: 2.5
-  m_Radius: 0.5
+  m_Radius: 0.55
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.25, z: 0}
+--- !u!114 &-7301293151909830768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6412271525077908251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 986c0e2a16bb78d4b9f4512c2a17a95b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heroUserInterfacePrefab: {fileID: 6839485732336230915, guid: d06f8a38fc3a9a4479c4ae1ba28627b0,
+    type: 3}
+  spellPrefab: {fileID: 3872238258288435779, guid: bdad2a5f449713b448bc5869bc364f56,
+    type: 3}
+  spawnPoint: {fileID: 6646244320748404411}
 --- !u!114 &-4982146470771565583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,7 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dd6df33c6d3c894dbdf7f6395cc8a0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turningPower: 250
+  turningPower: 300
 --- !u!114 &-4583223054960929815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,23 +242,6 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &1042699713917170546
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6412271525077908251}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ec915f6f2b140f429b9a9ccf9cb8384, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  heroUserInterfacePrefab: {fileID: 6839485732336230915, guid: d06f8a38fc3a9a4479c4ae1ba28627b0,
-    type: 3}
-  hitboxPrefab: {fileID: 3872238258288435779, guid: bdad2a5f449713b448bc5869bc364f56,
-    type: 3}
-  hitboxPoint: {fileID: 6646244320748404411}
 --- !u!114 &6322058024717012710
 MonoBehaviour:
   m_ObjectHideFlags: 0

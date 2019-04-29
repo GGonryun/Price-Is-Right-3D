@@ -30,7 +30,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dd6df33c6d3c894dbdf7f6395cc8a0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turningPower: 210
+  turningPower: 300
 --- !u!114 &1524785908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,7 +100,7 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 1
   isRuntimeInstantiated: 0
---- !u!114 &655299211185961236
+--- !u!114 &1149007918951029301
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 879361085692065715}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25eb8041c9a0a4b4cb3dd88cd7248fe1, type: 3}
+  m_Script: {fileID: 11500000, guid: 986c0e2a16bb78d4b9f4512c2a17a95b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   heroUserInterfacePrefab: {fileID: 6839485732336230915, guid: d06f8a38fc3a9a4479c4ae1ba28627b0,
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5e0063faa29fd84fab525e0e8ccaf92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseKnockback: 12.5
+  baseKnockback: 15
 --- !u!1 &2770005138872112384
 GameObject:
   m_ObjectHideFlags: 0

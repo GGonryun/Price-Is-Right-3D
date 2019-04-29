@@ -9,6 +9,7 @@ TagManager:
   - Spell
   - Sword
   - Arrow
+  - TwoHand
   layers:
   - Default
   - TransparentFX

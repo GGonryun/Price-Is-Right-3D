@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public abstract class Hero : MonoBehaviourPun
+public sealed class Hero : MonoBehaviourPun
 {
     public string Name => this.photonView.Owner.NickName;
     public float Multiplier => this.impactDetector.Multiplier;
@@ -14,8 +14,16 @@ public abstract class Hero : MonoBehaviourPun
     [SerializeField]
     protected GameObject heroUserInterfacePrefab = null;
 
+    [Tooltip("This object will be instantiated after attacking.")]
+    [SerializeField]
+    private GameObject spellPrefab = null;
+
+    [Tooltip("This is the location where the object will be instantiated at.")]
+    [SerializeField]
+    private Transform spawnPoint = null;
+
     #region UNITY CALLBACKS
-    protected virtual void Awake()
+    private void Awake()
     {
         cameraWork = GetComponent<CameraWork>();
         if (!cameraWork)
@@ -28,17 +36,17 @@ public abstract class Hero : MonoBehaviourPun
             Debug.LogError("<Color=Red> Hero <a></a></Color>is missing an AnimationController component !! ", this); 
     }
 
-    protected virtual void OnEnable()
+    private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    protected virtual void OnDisable()
+    private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    protected virtual void Start()
+    private void Start()
     {
         CreateSticker();
 
@@ -46,7 +54,7 @@ public abstract class Hero : MonoBehaviourPun
             cameraWork.OnStartFollowing();
     }
 
-    protected virtual void Update()
+    private void Update()
     {
         if (photonView.IsMine)
         {
@@ -57,16 +65,33 @@ public abstract class Hero : MonoBehaviourPun
     #endregion UNITY CALLBACKS
 
     #region ASTRACT
-    protected abstract void Primary(Vector3 position, Quaternion rotation, PhotonMessageInfo info);
-    protected abstract void Hit();
-    protected abstract float Secondary();
+
+    [PunRPC]
+    private void Primary(Vector3 position, Quaternion rotation, PhotonMessageInfo info)
+    {
+        GameObject obj = Instantiate(spellPrefab, position, rotation) as GameObject;
+        Spell spell = obj.GetComponent<Spell>();
+        Spell.Link(spell, photonView.Owner);
+    }
+
+    private void Hit()
+    {
+        if (photonView.IsMine)
+        {
+            photonView.RPC("Primary", RpcTarget.AllViaServer, spawnPoint.position, spawnPoint.rotation);
+        }
+    }
+
+    private float Secondary()
+    {
+        return 1f;
+    }
     #endregion ABSTRACT
 
     #region ANIMATION CALLBACKS
     private void FootL() { }
 
     private void FootR() { }
-
 
     #endregion ANIMATION CALLBACKS
 

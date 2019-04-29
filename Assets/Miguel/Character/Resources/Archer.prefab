@@ -43,7 +43,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 2
   m_Height: 2.5
-  m_Radius: 0.5
+  m_Radius: 0.45
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -109,7 +109,7 @@ MonoBehaviour:
     SynchronizeType: 1
     Name: Attack1Trigger
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: RangeAttack1Trigger
   - Type: 4
     SynchronizeType: 1
@@ -121,27 +121,10 @@ MonoBehaviour:
     SynchronizeType: 0
     Name: Input Z
   m_SynchronizeLayers:
-  - SynchronizeType: 1
+  - SynchronizeType: 0
     LayerIndex: 0
   - SynchronizeType: 0
     LayerIndex: 1
---- !u!114 &-6508527772601403198
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5759199283085897128}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68f6cf2bf83c0b94b8d32bc34cb1b39f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  heroUserInterfacePrefab: {fileID: 6839485732336230915, guid: d06f8a38fc3a9a4479c4ae1ba28627b0,
-    type: 3}
-  arrowPrefab: {fileID: 4112758929826218378, guid: 6844c9fca00064644bfc13a7da0aca2e,
-    type: 3}
-  arrowSpawnPoint: {fileID: 758875919934662403}
 --- !u!114 &-1991896180889565359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,7 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dd6df33c6d3c894dbdf7f6395cc8a0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turningPower: 250
+  turningPower: 300
 --- !u!114 &1179942155601588997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,6 +166,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseKnockback: 20
+--- !u!114 &7119544799354663474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5759199283085897128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 986c0e2a16bb78d4b9f4512c2a17a95b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heroUserInterfacePrefab: {fileID: 6839485732336230915, guid: d06f8a38fc3a9a4479c4ae1ba28627b0,
+    type: 3}
+  spellPrefab: {fileID: 3136832051259254124, guid: 4119a0a5bd4d56a4998c58830d76847b,
+    type: 3}
+  spawnPoint: {fileID: 758875919934662403}
 --- !u!1 &5842418164802495297
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,6 +285,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Archer
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d2c0943173fa94146bd1b04b5438a19d, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d2c0943173fa94146bd1b04b5438a19d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.675316
@@ -328,6 +332,18 @@ PrefabInstance:
     - target: {fileID: 400000, guid: d2c0943173fa94146bd1b04b5438a19d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: d2c0943173fa94146bd1b04b5438a19d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: d2c0943173fa94146bd1b04b5438a19d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: d2c0943173fa94146bd1b04b5438a19d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9590292, guid: d2c0943173fa94146bd1b04b5438a19d, type: 3}
       propertyPath: m_Controller

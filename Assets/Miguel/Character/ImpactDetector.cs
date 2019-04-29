@@ -51,6 +51,16 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
             multiplier += .25f;
             AddKnockback(heading, (baseKnockback/2f) * multiplier);
         }
+
+        if (other.gameObject.CompareTag("TwoHand"))
+        {
+            Debug.Log($"Trigger Enter Detected Hit: {photonView.Owner.NickName}, {other.gameObject.name}");
+
+            Vector3 heading = other.transform.forward;
+            heading.y *= 0f;
+            multiplier += .75f;
+            AddKnockback(heading, (baseKnockback) * multiplier);
+        }
     }
 
     private void OnParticleCollision(GameObject other)
