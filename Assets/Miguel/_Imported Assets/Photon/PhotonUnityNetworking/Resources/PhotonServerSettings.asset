@@ -31,8 +31,7 @@ MonoBehaviour:
   RpcList:
   - DestroySpaceship
   - Fire
+  - Primary
   - RespawnSpaceship
-  - FireSpell
-  - Cast
   DisableAutoOpenWizard: 1
   ShowSettings: 0
