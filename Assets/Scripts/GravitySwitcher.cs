@@ -6,14 +6,18 @@ using UnityEngine;
 public class GravitySwitcher : MonoBehaviour
 {
     Rigidbody rb;
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        this.gameObject.GetComponent<Rigidbody>();
+        rb = gameObject.GetComponent<Rigidbody>();
     }
 
     public void ApplyGravity()
     {
         rb.useGravity = true;
+    }
+
+    public void DeactivateGravity()
+    {
+        rb.useGravity = false;
     }
 }

@@ -28,7 +28,7 @@ public class FlatFloorConcreteStrategy : MonoBehaviour, IFloor
             {
                Vector3 tempVector3 = CreateVector3(currXIndex, currZIndex);
                GameObject cube = CreateGameObject(tempVector3);
-               Debug.Log("Created cube at " +tempVector3);
+               Debug.Log("Created cube at " + tempVector3);
                floorOfCubes[tempVector3] = cube;
             }
         }
@@ -46,7 +46,7 @@ public class FlatFloorConcreteStrategy : MonoBehaviour, IFloor
         return cube;
     }
 
-    public void SetPrefab(GameObject prefab)
+    public void Initialize(GameObject prefab)
     {
         this.cubePrefab = prefab;
     }

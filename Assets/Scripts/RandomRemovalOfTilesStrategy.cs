@@ -8,4 +8,6 @@ public class RandomRemovalOfTilesStrategy : MonoBehaviour, IFloorDestroyer
 
         
     }
+
+
 }
