@@ -60,11 +60,11 @@ public class Floor : MonoBehaviour
     /// </summary>
     public void BeginShrinkingFloor()
     {
-        shrinkMapEdges.DestroyFloor(numOfCubesInXDir, numOfCubesInZDir, floor);
+        shrinkMapEdges.DestroyFloor(numOfCubesInXDir, numOfCubesInZDir, floor, null);
     }
 
     public void DestroyListOfCubes(List<Vector3> listToDelete)
     {
-        //selectedRemovalOfTilesStrategy.Initialize();
+        selectedRemovalOfTiles.DestroyFloor(numOfCubesInXDir, numOfCubesInZDir, floor, listToDelete);
     }
 }

@@ -31,8 +31,28 @@ public class EnviromentController : MonoBehaviour
         deleteTheseCubes.Add(new Vector3(2, 0, 3));
         deleteTheseCubes.Add(new Vector3(1, 0, 3));
         DestroyListOfCubes(deleteTheseCubes);
+        deleteTheseCubes.Add(new Vector3(5, 0, 4));
+        deleteTheseCubes.Add(new Vector3(4, 0, 3));
+        deleteTheseCubes.Add(new Vector3(3, 0, 3));
+        deleteTheseCubes.Add(new Vector3(2, 0, 3));
+        deleteTheseCubes.Add(new Vector3(1, 0, 3));
+        DestroyListOfCubes(deleteTheseCubes);
+        deleteTheseCubes.Add(new Vector3(5, 0, 4));
+        deleteTheseCubes.Add(new Vector3(4, 0, 4));
+        deleteTheseCubes.Add(new Vector3(3, 0, 4));
+        deleteTheseCubes.Add(new Vector3(2, 0, 4));
+        deleteTheseCubes.Add(new Vector3(1, 0, 4));
+        DestroyListOfCubes(deleteTheseCubes);
+
+
     }
 
+    /// <summary>
+    /// Initializer for declaring the floor dimensions and prefab for floor tile
+    /// </summary>
+    /// <param name="floorTileprefab"></param>
+    /// <param name="numOfCubesInXDir"></param>
+    /// <param name="numOfCubesInZDir"></param>
     public void Initialize(GameObject floorTileprefab, int numOfCubesInXDir, int numOfCubesInZDir)
     {
         // Initialization of floor tile prefab
@@ -43,44 +63,36 @@ public class EnviromentController : MonoBehaviour
         this.numOfCubesInZDir = numOfCubesInZDir;
     }
 
+    /// <summary>
+    /// This function needs to be called before calling CreateFloor. It initializes the floor assigning the correct values to the floor object.
+    /// </summary>
     public void InitializeFloor()
     {
         floor.Initialize(floorTileprefab, numOfCubesInXDir, numOfCubesInZDir);
     }
 
+    /// <summary>
+    /// Once InitializeFloor is called you can call this function which generates the floor.
+    /// </summary>
     public void CreateFloor()
     {
         floor.CreateFloor();
     } 
 
+    /// <summary>
+    /// BeginShrinkingFloor() should be called after creating a floor. It will trigger the edges of the floor to be destroyed over time.
+    /// </summary>
     public void BeginShrinkingFloor()
     {
         floor.BeginShrinkingFloor();
     }
 
-    //public void DestroyRandomCubes()
-    //{
-    //    floor.RandomlyDestroyCubes();
-    //}
-
+    /// <summary>
+    /// DestroyListOfCubes() should be called after creating a floor. It will trigger the floor tiles specified with the listToDelete to be deleted. 
+    /// </summary>
+    /// <param name="listToDelete"></param>
     public void DestroyListOfCubes(List<Vector3> listToDelete) //todo outside EnviromentController create a random selection of cubes function
     {
         floor.DestroyListOfCubes(listToDelete);
     }
-
-
-    private void Start()
-    {
-  
-        //randomRemovalOfTiles.DestroyFloor(numOfCubesInXDir, numOfCubesInZDir, floor);
-    }
-
-    // singleton debugger 
-    // todo: put strategies in an list // up to the caller to choose these strategies
-    // todo: function to build an enviroment 
-    // todo:  another function that lets you start the fall 
-
-    //private void dropCube(List<Vector3> DeletionList ) {
-    //    throw new NotImplemetedException();
-    //}
 }

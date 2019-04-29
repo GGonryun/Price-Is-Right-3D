@@ -6,14 +6,11 @@ using UnityEngine;
 public class FlatFloorConcreteStrategy : MonoBehaviour, IFloor
 {
     private GameObject cubePrefab;
+    private GameObject EnviromentController;
 
-    void Awake()
-    {
-        //cubePrefab = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        // Resources.Load<GameObject>("/Assets/Resources/Prefabs/Cube") as GameObject;
-    }
     public Dictionary<Vector3, GameObject> Generate(int numOfCubesInXDir, int numOfCubesInZDir)
     {
+        EnviromentController = GameObject.Find("EnviromentController");
         return InstanciateCubes(numOfCubesInXDir, numOfCubesInZDir);
     }
 
@@ -43,6 +40,7 @@ public class FlatFloorConcreteStrategy : MonoBehaviour, IFloor
     private GameObject CreateGameObject(Vector3 spawnPosition)
     {
         GameObject cube = Instantiate(cubePrefab, spawnPosition, Quaternion.identity) as GameObject;
+        cube.transform.SetParent(EnviromentController.transform);
         return cube;
     }
 
