@@ -26,9 +26,7 @@ public sealed class Mage : Hero
     {
         if (photonView.IsMine)
         {
-            Vector3 position = spawnPoint.position;
-            Quaternion rotation = spawnPoint.rotation;
-            photonView.RPC("Primary", RpcTarget.AllViaServer, position, rotation);
+            photonView.RPC("Primary", RpcTarget.AllViaServer, spawnPoint.position, spawnPoint.rotation);
         }
     }
 

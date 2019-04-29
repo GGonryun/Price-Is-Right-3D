@@ -3,20 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Knight : Hero
+public class Archer : Hero
 {
     [Tooltip("")]
     [SerializeField]
-    private GameObject hitboxPrefab = null;
+    private GameObject arrowPrefab = null;
 
     [Tooltip("")]
     [SerializeField]
-    private Transform hitboxPoint = null;
+    private Transform arrowSpawnPoint = null;
 
     [PunRPC]
     protected override void Primary(Vector3 position, Quaternion rotation, PhotonMessageInfo info)
     {
-        GameObject obj = Instantiate(hitboxPrefab, position, rotation);
+        GameObject obj = Instantiate(arrowPrefab, position, rotation);
         Spell spell = obj.GetComponent<Spell>();
         Spell.Link(spell, info.photonView.Owner);
     }
@@ -25,7 +25,7 @@ public class Knight : Hero
     {
         if (photonView.IsMine)
         {
-            photonView.RPC("Primary", RpcTarget.AllViaServer, hitboxPoint.position, hitboxPoint.rotation);
+            photonView.RPC("Primary", RpcTarget.AllViaServer, arrowSpawnPoint.position, arrowSpawnPoint.rotation);
         }
     }
 

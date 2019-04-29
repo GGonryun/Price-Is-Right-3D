@@ -17,7 +17,7 @@ public class Spell : MonoBehaviour
     }
 
     #region UNITY CALLBACKS
-    public void Start()
+    protected virtual void Start()
     {
         Destroy(gameObject, delay);
     }

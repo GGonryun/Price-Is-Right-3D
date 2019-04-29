@@ -31,15 +31,25 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
             return;
         if (other.gameObject.CompareTag("Deadzone"))
             isDead = true;
-        if(other.gameObject.CompareTag("Sword"))
-        {
-            Debug.Log("Hit!");
-            Vector3 heading = transform.position - other.transform.position;
-            heading.y *= 0f;
 
-            //Increase the knockback multiplier.
+        if (other.gameObject.CompareTag("Sword"))
+        {
+            Debug.Log($"Trigger Enter Detected Hit: {photonView.Owner.NickName}, {other.gameObject.name}");
+
+            Vector3 heading = other.transform.forward;
+            heading.y *= 0f;
             multiplier += .5f;
             AddKnockback(heading, baseKnockback * multiplier);
+        }
+
+        if (other.gameObject.CompareTag("Arrow"))
+        {
+            Debug.Log($"Trigger Enter Detected Hit: {photonView.Owner.NickName}, {other.gameObject.name}");
+
+            Vector3 heading = other.transform.forward;
+            heading.y *= 0f;
+            multiplier += .25f;
+            AddKnockback(heading, (baseKnockback/2f) * multiplier);
         }
     }
 
