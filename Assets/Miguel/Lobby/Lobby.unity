@@ -801,7 +801,7 @@ MonoBehaviour:
     m_Options:
     - m_Text: Wizard
       m_Image: {fileID: 0}
-    - m_Text: Soldier
+    - m_Text: Knight
       m_Image: {fileID: 0}
     - m_Text: Archer
       m_Image: {fileID: 0}

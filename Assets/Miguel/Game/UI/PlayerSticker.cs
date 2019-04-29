@@ -16,30 +16,30 @@ public class PlayerSticker : MonoBehaviour
     [Header("Color Elements")]
     [Tooltip("")]
     [SerializeField]
-    private Color colorBase;
+    private Color colorBase = Color.white;
     [Tooltip("")]
     [SerializeField]
-    private Color colorSafe;
+    private Color colorSafe = Color.white;
     [Tooltip("")]
     [SerializeField]
-    private Color colorWarning;
+    private Color colorWarning = Color.white;
     [Tooltip("")]
     [SerializeField]
-    private Color colorDanger;
+    private Color colorDanger = Color.white;
     [Tooltip("")]
     [SerializeField]
-    private Color colorCritical;
+    private Color colorCritical = Color.white;
 
     [Header("Settings")]
     [Tooltip("Pixel offset from the player target")]
     public Vector3 ScreenOffset = new Vector3(0f, 30f, 0f);
 
-    public void Link(Mage mage)
+    public void Link(Hero hero)
     {
-        this.mage = mage;
-        PlayerNameText.text = mage.Name;
-        characterHeight = mage.Height;
-        targetTransform = mage.transform;
+        this.hero = hero;
+        PlayerNameText.text = hero.Name;
+        characterHeight = hero.Height;
+        targetTransform = hero.transform;
     }
 
     #region UNITY CALLBACKS
@@ -49,9 +49,9 @@ public class PlayerSticker : MonoBehaviour
     }
     private void Update()
     {
-        if (mage == null)
+        if (hero == null)
             Destroy(this.gameObject);
-        PlayerStatus.color = SelectColor(Mathf.FloorToInt(mage.Multiplier));
+        PlayerStatus.color = SelectColor(Mathf.FloorToInt(hero.Multiplier));
     }
 
     private void LateUpdate()
@@ -83,7 +83,7 @@ public class PlayerSticker : MonoBehaviour
                 return colorCritical;
         }
     }
-    private Mage mage;
+    private Hero hero;
     private float characterHeight = 0f;
     private Transform targetTransform;
     #endregion

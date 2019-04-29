@@ -5,6 +5,9 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
 {
     public float Multiplier => multiplier;
     public float Height => characterController.height;
+    [Tooltip("")]
+    [SerializeField]
+    private float baseKnockback = 10f;
 
     #region UNITY CALLBACKS
     private void Awake()
@@ -12,11 +15,6 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
         characterController = gameObject.GetComponent<CharacterController>();
         if (!characterController)
             Debug.LogError("<Color=Red> ImpactDetector <a></a></Color>is missing a CharacterController component !! ", this);
-
-
-        animationController = gameObject.GetComponent<AnimationController>();
-        if(!animationController)
-            Debug.LogError("<Color=Red> ImpactDetector <a></a></Color>is missing an AnimationController component !! ", this); 
     }
 
     private void Update()
@@ -29,12 +27,20 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name);
-
         if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
             return;
         if (other.gameObject.CompareTag("Deadzone"))
             isDead = true;
+        if(other.gameObject.CompareTag("Sword"))
+        {
+            Debug.Log("Hit!");
+            Vector3 heading = transform.position - other.transform.position;
+            heading.y *= 0f;
+
+            //Increase the knockback multiplier.
+            multiplier += .5f;
+            AddKnockback(heading, baseKnockback * multiplier);
+        }
     }
 
     private void OnParticleCollision(GameObject other)
@@ -42,7 +48,8 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
         //if it hits someone else don't react.
         if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
             return;
-        Spell spell = other.GetComponent<Spell>();
+        if (!other.gameObject.CompareTag("Spell"))
+            return;
 
         //We only care about the movement in the x/z plane.
         Vector3 heading = transform.position - other.transform.position;
@@ -85,10 +92,8 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
     }
 
     private CharacterController characterController = null;
-    private AnimationController animationController = null;
     private Vector3 impact = Vector3.zero;
     private float impactThreshold = 0.1f;
-    private float baseKnockback = 10f;
     private float dissipationRate = 4f;
     private float multiplier = 1f;
     private bool isDead = false;

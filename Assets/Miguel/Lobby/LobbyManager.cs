@@ -48,7 +48,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [Header("Testing Character Select Panel")]
     [Tooltip("")]
     [SerializeField]
-    private Dropdown characterSelectDropdown;
+    private Dropdown characterSelectDropdown = null;
 
     #region UNITY CALLBACKS
     private void Awake()

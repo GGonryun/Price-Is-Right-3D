@@ -14,11 +14,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private Button exit = null;
 
-    [Header]
-    [Tooltip("")]
-    [SerializeField]
-    private GameObject playerPrefab = null;
-
     #region UNITY CALLBACKS
     private void Awake()
     {
@@ -32,10 +27,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         StartGame();
 
-        if (!playerPrefab)
-            Debug.LogError("<Color=Red> GameManager <a></a></Color>is missing a player prefab !! ", this);
-        else
-            PhotonNetwork.Instantiate(Settings.Instance.Character.ToString(), new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+        PhotonNetwork.Instantiate(Settings.Instance.Character.ToString(), new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
     }
     #endregion UNITY CALLBACKS
 
@@ -107,6 +99,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
     #endregion UTILITY
 
-    public static GameManager Instance;
+    public static GameManager Instance = null;
 
 }

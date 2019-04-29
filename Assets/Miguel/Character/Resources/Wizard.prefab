@@ -112,10 +112,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25eb8041c9a0a4b4cb3dd88cd7248fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heroUserInterfacePrefab: {fileID: 6839485732336230915, guid: d06f8a38fc3a9a4479c4ae1ba28627b0,
+    type: 3}
   spellPrefab: {fileID: 1987054487506206, guid: a7f3d194c8a20364485700aaf7b07050,
     type: 3}
   spawnPoint: {fileID: 3700898650571438579}
-  mageUI: {fileID: 6839485732336230915, guid: d06f8a38fc3a9a4479c4ae1ba28627b0, type: 3}
 --- !u!114 &1501828745086417928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,6 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5e0063faa29fd84fab525e0e8ccaf92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseKnockback: 12.5
 --- !u!1 &2770005138872112384
 GameObject:
   m_ObjectHideFlags: 0
@@ -276,7 +278,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: bad0018eb9256e6409155981dd5af9a2, type: 3}
       propertyPath: m_Name
-      value: Mage
+      value: Wizard
       objectReference: {fileID: 0}
     - target: {fileID: 9590292, guid: bad0018eb9256e6409155981dd5af9a2, type: 3}
       propertyPath: m_ApplyRootMotion

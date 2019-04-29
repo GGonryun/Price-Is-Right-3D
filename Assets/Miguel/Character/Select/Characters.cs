@@ -1,6 +1,6 @@
 using SweetBirdStudios.Helpers;
 
-public enum Character { Wizard, Soldier, Archer, Warrior }
+public enum Character { Wizard, Knight, Archer, Warrior }
 
 /// <summary>
 /// Helper class for Character enum.
