@@ -4,130 +4,107 @@ using UnityEngine;
 
 public class ShrinkFloorStrategy : MonoBehaviour, IFloorDestroyer
 {
-    private int minBoundXCoord;
-    private int minBoundXCoordLimit;
-    private int maxBoundXCoord;
-    private int maxBoundXCoordLimit;
-
-    private int minBoundZCoord;
-    private int minBoundZCoordLimit;
-    private int maxBoundZCoord;
-    private int maxBoundZCoordLimit;
-
     private readonly int colorDelay = 0;
     private readonly int intermediateDelay = 3;
-    private readonly int iterationDelay = 2;
 
     private List<GameObject> listOfSelectedCubes = new List<GameObject>(10);
+    private readonly object balanceLock = new object();
 
-    public void Destroy(int numOfCubesInXDir, int numOfCubesInZDir, Dictionary<Vector3, GameObject> floor, List<Vector3> cubesToDestroy)
+    public void Destroy(int numOfCubesInXDir, int numOfCubesInZDir, Dictionary<Vector3, GameObject> floor, List<Vector3> cubesToDestroy,
+        int minBoundXCoord, int maxBoundXCoord, int minBoundZCoord, int maxBoundZCoord)
     {
+        //listOfSelectedCubes = new List<GameObject>(10);
         // Ignore cubesToDestroy for this strategy, the object will have a null value
-        InitializeBounds(numOfCubesInXDir, numOfCubesInZDir);
-        StartCoroutine(DestroyFloorWithTimer(numOfCubesInXDir, numOfCubesInZDir, floor));
+        DestroyFloorWithTimer(numOfCubesInXDir, numOfCubesInZDir, floor, minBoundXCoord, maxBoundXCoord, minBoundZCoord, maxBoundZCoord);
+        //Debug.Log(" out of routine listofSelectedCubes.count = " + listOfSelectedCubes.Count);
+        //listOfSelectedCubes.Clear(); // why did this not work in in IENUMERATOR???
+        //Debug.Log("listofSelectedCubes.count = " + listOfSelectedCubes.Count);
     }
 
-    private IEnumerator DestroyFloorWithTimer(int numOfCubesInXDir, int numOfCubesInZDir, Dictionary<Vector3, GameObject> floor)
+    private void DestroyFloorWithTimer(int numOfCubesInXDir, int numOfCubesInZDir, Dictionary<Vector3, GameObject> floor, int minBoundXCoord, int maxBoundXCoord, int minBoundZCoord, int maxBoundZCoord)
     {
-        while(!((minBoundXCoord == minBoundXCoordLimit) && (minBoundZCoord == minBoundZCoordLimit)))
-        {
-            listOfSelectedCubes.Clear();
-            for(int currentZIdx = minBoundZCoord; currentZIdx < maxBoundZCoord; currentZIdx++)
+        lock (balanceLock) {
+            listOfSelectedCubes = new List<GameObject>(10);
+            Debug.Log("RemoveFloorEdge Call initial parameters");
+            Debug.Log("minBoundXCoord : " + minBoundXCoord + "; maxBoundXCoord: " + maxBoundXCoord);
+            Debug.Log("minBoundZCoord : " + minBoundZCoord + "; maxBoundZCoord: " + maxBoundZCoord);
+            Debug.Log("End of initial parameters");
+
+            for (int currentZIdx = minBoundZCoord; currentZIdx < maxBoundZCoord; currentZIdx++)
             {
-                for(int currentXIdx = minBoundXCoord; currentXIdx < maxBoundXCoord; currentXIdx++)
+                for (int currentXIdx = minBoundXCoord; currentXIdx < maxBoundXCoord; currentXIdx++)
                 {
-                    if (currentZIdx == minBoundZCoord || currentZIdx == maxBoundZCoord-1)
+                    Debug.Log("---Beginning---");
+                    // if currentZIdx is equal to minBoundZCoord or maxBoundZCoord then select game objects at all (currentXIdx, 0, currentZIdx) 
+                    if (currentZIdx == minBoundZCoord || currentZIdx == maxBoundZCoord - 1)
                     {
-                        Vector3 tempVector3 = CreateVector3(currentXIdx, currentZIdx);
-                        if(floor[tempVector3].activeSelf == true) {
-                            listOfSelectedCubes.Add(floor[tempVector3]);
-                        }
-                    }
-                    else if(currentXIdx == minBoundXCoord || currentXIdx == maxBoundXCoord-1 )
-                    {
+                        bool firstConditionalValue = (currentZIdx == minBoundZCoord || currentZIdx == maxBoundZCoord - 1);
+                        Debug.Log("if (currentZIdx == minBoundZCoord || currentZIdx == maxBoundZCoord - 1)  is : " + firstConditionalValue);
+                        Debug.Log("minBoundXCoord : " + minBoundXCoord + "; maxBoundXCoord: " + maxBoundXCoord);
+                        Debug.Log("minBoundZCoord : " + minBoundZCoord + "; maxBoundZCoord: " + maxBoundZCoord);
+                        Debug.Log("CurrentXIdx: " + currentXIdx + "; CurrentZIdx: " + currentZIdx);
+
                         Vector3 tempVector3 = CreateVector3(currentXIdx, currentZIdx);
                         if (floor[tempVector3].activeSelf == true)
                         {
+                            Debug.Log(" ^ DESTROYED! first conditional^ ");
                             listOfSelectedCubes.Add(floor[tempVector3]);
                         }
                     }
+                    // if currZIdx is not equal to minBoundZCoord or maxBoundZCoord then only select the game objects at all (currentXIdx, 0, currentZIdx) when currentXIdx equals minBoundXCoord and MaxBoundXCoord
+                    else if (currentXIdx == minBoundXCoord || currentXIdx == maxBoundXCoord - 1)
+                    {
+                        bool secondConditionalValue = (currentXIdx == minBoundXCoord || currentXIdx == maxBoundXCoord - 1);
+                        Debug.Log("if (currentXIdx == minBoundXCoord || currentXIdx == maxBoundXCoord - 1) is : " + secondConditionalValue);
+                        bool secondConditionalValueerrorlogiccheck = (currentXIdx == minBoundXCoord || currentXIdx == (maxBoundXCoord - 1));
+                        Debug.Log("if (currentXIdx == minBoundXCoord || currentXIdx == (maxBoundXCoord - 1))  is : " + secondConditionalValueerrorlogiccheck);
+                        Debug.Log("minBoundXCoord : " + minBoundXCoord + "; maxBoundXCoord: " + maxBoundXCoord);
+                        Debug.Log("minBoundZCoord : " + minBoundZCoord + "; maxBoundZCoord: " + maxBoundZCoord);
+                        Debug.Log("CurrentXIdx: " + currentXIdx + "; CurrentZIdx: " + currentZIdx);
+                        Vector3 tempVector3 = CreateVector3(currentXIdx, currentZIdx);
+                        if (floor[tempVector3].activeSelf == true)
+                        {
+                            Debug.Log(" ^ DESTROYED! second conditional^ ");
+                            listOfSelectedCubes.Add(floor[tempVector3]);
+                        }
+
+                    }
+                    Debug.Log("---End---");
                 }
             }
+            Debug.Log("Out of for loops; listofSelectedCubes.count = " + listOfSelectedCubes.Count);
 
-            yield return new WaitForSeconds(colorDelay);
+            //yield return new WaitForSeconds(colorDelay);
+            Debug.Log("color delay done");
+            int idxNum2 = 0;
+            Debug.Log("listofSelectedCubes.count = " + listOfSelectedCubes.Count);
+            Debug.Log("idxNum < listOfSelectedCubes: " + (idxNum2 < listOfSelectedCubes.Count));
             for (int idxNum = 0; idxNum < listOfSelectedCubes.Count; idxNum++)
             {
                 GameObject go = listOfSelectedCubes[idxNum];
                 go.SendMessage("ApplyColorChange");
-                yield return null; //wait 1 frame `yield return new WaitForEndOfFrame()`
+                Debug.Log("ApplyColorChange done");
+                //yield return null; //wait 1 frame `yield return new WaitForEndOfFrame()`
             }
 
-            yield return new WaitForSeconds(intermediateDelay);
+            //yield return new WaitForSeconds(intermediateDelay);
             for (int idxNum = 0; idxNum < listOfSelectedCubes.Count; idxNum++)
             {
                 GameObject go = listOfSelectedCubes[idxNum];
                 go.SendMessage("ApplyGravity");
                 go.SendMessage("UnfreezeConstraints");
-                yield return null; //wait 1 frame `yield return new WaitForEndOfFrame()`
+                //yield return null; //wait 1 frame `yield return new WaitForEndOfFrame()`
             }
-            
-            /*
-             * Update the bounds of the floor being selected for the next iteration
-             */
-            if (minBoundXCoord < minBoundXCoordLimit)
-            {
-                minBoundXCoord += 1;
-                maxBoundXCoord -= 1;
-            }
-            if(minBoundZCoord < minBoundZCoordLimit)
-            {
-                minBoundZCoord += 1;
-                maxBoundZCoord -= 1;
-            }
-            yield return new WaitForSeconds(iterationDelay);
 
             // Deactivate cubes that have been destroyed
             for (int idxNum = 0; idxNum < listOfSelectedCubes.Count; idxNum++)
             {
                 GameObject go = listOfSelectedCubes[idxNum];
                 go.SendMessage("SetNotActive"); //todo create random destroy cubes and only drop if still active
-                yield return null; //wait 1 frame `yield return new WaitForEndOfFrame()`
+                //yield return null; //wait 1 frame `yield return new WaitForEndOfFrame()`
             }
         }
-    }
-
-    private void InitializeBounds(int numOfCubesInXDir, int numOfCubesInZDir)
-    {
-        if((numOfCubesInXDir % 2) == 0)
-        {
-            minBoundXCoord = 0;
-            maxBoundXCoord = numOfCubesInXDir;
-            minBoundXCoordLimit = (int)(numOfCubesInXDir / 2);
-            maxBoundXCoordLimit = numOfCubesInXDir - (int)(numOfCubesInXDir / 2); // exclusive; maxBoundX should not decrement if maxBoundX is == maxBoundxLimit
-        }
-        else
-        {
-            minBoundXCoord = 0;
-            maxBoundXCoord = numOfCubesInXDir;
-            minBoundXCoordLimit = (int)(numOfCubesInXDir / 2) + 1;
-            maxBoundXCoordLimit = (int)(numOfCubesInXDir / 2) + 1;
-        }
-
-        if((numOfCubesInZDir % 2) == 0)
-        {
-            minBoundZCoord = 0;
-            maxBoundZCoord = numOfCubesInZDir;
-            minBoundZCoordLimit = (int)(numOfCubesInZDir / 2);
-            maxBoundZCoordLimit = numOfCubesInZDir - (int)(numOfCubesInZDir / 2);
-        }
-        else
-        {
-            minBoundZCoord = 0;
-            maxBoundZCoord = numOfCubesInZDir;
-            minBoundZCoordLimit = (int)(numOfCubesInZDir / 2) + 1;
-            maxBoundZCoordLimit = numOfCubesInZDir - (int)(numOfCubesInZDir / 2);
-
-        }
+        
     }
 
     private Vector3 CreateVector3(int xCoord, int zCoord) //todo maybe create this at start 

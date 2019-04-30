@@ -8,7 +8,7 @@ public class SelectedRemovalOfTilesStrategy : MonoBehaviour, IFloorDestroyer
     private readonly int intermediateDelay = 3;
     private readonly int deactivationDelay = 2;
 
-    public void Destroy(int numOfCubesInXDir, int numOfCubesInZDir, Dictionary<Vector3, GameObject> floor, List<Vector3> cubesToDestroy)
+    public void Destroy(int numOfCubesInXDir, int numOfCubesInZDir, Dictionary<Vector3, GameObject> floor, List<Vector3> cubesToDestroy, int minBoundXCoord, int maxBoundXCoord, int minBoundZCoord, int maxBoundZCoord)
     {
         StartCoroutine(DestroyFloorWithTimer(numOfCubesInXDir, numOfCubesInZDir, floor, cubesToDestroy));
     }

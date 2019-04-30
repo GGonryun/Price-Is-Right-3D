@@ -10,8 +10,8 @@ public class FloorDestroyer : MonoBehaviour
         this.destroyerStategy = strategy;
     }
 
-    public void DestroyFloor(int numOfCubesInXDir, int numOfCubesInZDir, Dictionary<Vector3, GameObject> floor, List<Vector3> cubesToDestroy)
+    public void DestroyFloor(int numOfCubesInXDir, int numOfCubesInZDir, Dictionary<Vector3, GameObject> floor, List<Vector3> cubesToDestroy, int minBoundXCoord, int maxBoundXCoord, int minBoundZCoord, int maxBoundZCoord)
     {
-        destroyerStategy.Destroy(numOfCubesInXDir, numOfCubesInZDir, floor, cubesToDestroy);
+        destroyerStategy.Destroy(numOfCubesInXDir, numOfCubesInZDir, floor, cubesToDestroy, minBoundXCoord, maxBoundXCoord, minBoundZCoord, maxBoundZCoord);
     }
 }

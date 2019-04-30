@@ -520,11 +520,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0301e3c0bb37afe46a74f2b97bc4c8a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numOfCubesInXDir: 40
-  numOfCubesInZDir: 40
+  numOfCubesInXDir: 3
+  numOfCubesInZDir: 3
   floorTileprefab: {fileID: 7472839793940615950, guid: d3a1c66d7f410ec41bfa9188ec4aea56,
     type: 3}
-  floor: {fileID: 0}
 --- !u!4 &1218326970
 Transform:
   m_ObjectHideFlags: 0

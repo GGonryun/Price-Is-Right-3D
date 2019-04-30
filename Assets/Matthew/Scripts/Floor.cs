@@ -7,6 +7,16 @@ public class Floor : MonoBehaviour
     private int numOfCubesInXDir;
     private int numOfCubesInZDir;
 
+    private int minBoundXCoord;
+    private int minBoundXCoordLimit;
+    private int maxBoundXCoord;
+    private int maxBoundXCoordLimit;
+
+    private int minBoundZCoord;
+    private int minBoundZCoordLimit;
+    private int maxBoundZCoord;
+    private int maxBoundZCoordLimit;
+
     Dictionary<Vector3, GameObject> floor = new Dictionary<Vector3, GameObject>();
 
     private IFloor floorGenerationStrategy;
@@ -45,6 +55,44 @@ public class Floor : MonoBehaviour
         selectedRemovalOfTilesStrategy = gameObject.AddComponent<SelectedRemovalOfTilesStrategy>();
         selectedRemovalOfTiles = gameObject.AddComponent<FloorDestroyer>();
         selectedRemovalOfTiles.SetGenerationStrategy(selectedRemovalOfTilesStrategy);
+
+        InitializeBounds(numOfCubesInXDir, numOfCubesInZDir);
+    }
+
+
+
+    private void InitializeBounds(int numOfCubesInXDir, int numOfCubesInZDir)
+    {
+        if ((numOfCubesInXDir % 2) == 0)
+        {
+            minBoundXCoord = 0;
+            maxBoundXCoord = numOfCubesInXDir;
+            minBoundXCoordLimit = (int)(numOfCubesInXDir / 2);
+            maxBoundXCoordLimit = numOfCubesInXDir - (int)(numOfCubesInXDir / 2); // exclusive; maxBoundX should not decrement if maxBoundX is == maxBoundxLimit
+        }
+        else
+        {
+            minBoundXCoord = 0;
+            maxBoundXCoord = numOfCubesInXDir;
+            minBoundXCoordLimit = (int)(numOfCubesInXDir / 2) + 1;
+            maxBoundXCoordLimit = (int)(numOfCubesInXDir / 2) + 1;
+        }
+
+        if ((numOfCubesInZDir % 2) == 0)
+        {
+            minBoundZCoord = 0;
+            maxBoundZCoord = numOfCubesInZDir;
+            minBoundZCoordLimit = (int)(numOfCubesInZDir / 2);
+            maxBoundZCoordLimit = numOfCubesInZDir - (int)(numOfCubesInZDir / 2);
+        }
+        else
+        {
+            minBoundZCoord = 0;
+            maxBoundZCoord = numOfCubesInZDir;
+            minBoundZCoordLimit = (int)(numOfCubesInZDir / 2) + 1;
+            maxBoundZCoordLimit = numOfCubesInZDir - (int)(numOfCubesInZDir / 2);
+
+        }
     }
 
     /// <summary>
@@ -55,16 +103,37 @@ public class Floor : MonoBehaviour
         floor = floorGenerator.GenerateFloor(numOfCubesInXDir, numOfCubesInZDir);
     }
 
+    
+    private int callCount = 0;
     /// <summary>
     /// This function is called to trigger the floor to shrink it's edges 
     /// </summary>
-    public void BeginShrinkingFloor()
+    public void RemoveFloorEdge() //todo create a limit of how many times this function can be called
     {
-        shrinkMapEdges.DestroyFloor(numOfCubesInXDir, numOfCubesInZDir, floor, null);
+        callCount += 1;
+        Debug.Log("RemoveFloorEdge call # : " + callCount);
+        Debug.Log("minBoundXCoordLimit: " + minBoundXCoordLimit + "; maxBoundXCoordLimit: " + maxBoundXCoordLimit);
+        Debug.Log("minBoundZCoordLimit: " + minBoundZCoordLimit + "; maxBoundZCoordLimit: " + maxBoundZCoordLimit);
+
+        shrinkMapEdges.DestroyFloor(numOfCubesInXDir, numOfCubesInZDir, floor, null, minBoundXCoord, maxBoundXCoord, minBoundZCoord, maxBoundZCoord);
+        /*
+        * Update the bounds of the floor being selected for the next iteration
+        */
+        if (minBoundXCoord < minBoundXCoordLimit)
+        {
+            minBoundXCoord += 1;
+            maxBoundXCoord -= 1;
+        }
+        if (minBoundZCoord < minBoundZCoordLimit)
+        {
+            minBoundZCoord += 1;
+            maxBoundZCoord -= 1;
+        }
+
     }
 
     public void DestroyListOfCubes(List<Vector3> listToDelete)
     {
-        selectedRemovalOfTiles.DestroyFloor(numOfCubesInXDir, numOfCubesInZDir, floor, listToDelete);
+        selectedRemovalOfTiles.DestroyFloor(numOfCubesInXDir, numOfCubesInZDir, floor, listToDelete, 0, 0, 0, 0); //todo change the implementation so we don't have to provide 0's
     }
 }

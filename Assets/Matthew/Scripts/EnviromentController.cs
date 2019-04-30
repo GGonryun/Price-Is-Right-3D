@@ -15,7 +15,6 @@ public class EnviromentController : MonoBehaviour
     [SerializeField]
     private GameObject floorTileprefab;
 
-    [SerializeField]
     private Floor floor;
 
     void Awake()
@@ -23,28 +22,48 @@ public class EnviromentController : MonoBehaviour
         floor = gameObject.AddComponent<Floor>();
         InitializeFloor();
         CreateFloor();
-        BeginShrinkingFloor();
-        List<Vector3> deleteTheseCubes = new List<Vector3>(10);
-        deleteTheseCubes.Add(new Vector3(5, 0, 3));
-        deleteTheseCubes.Add(new Vector3(4, 0, 3));
-        deleteTheseCubes.Add(new Vector3(3, 0, 3));
-        deleteTheseCubes.Add(new Vector3(2, 0, 3));
-        deleteTheseCubes.Add(new Vector3(1, 0, 3));
-        DestroyListOfCubes(deleteTheseCubes);
-        deleteTheseCubes.Add(new Vector3(5, 0, 4));
-        deleteTheseCubes.Add(new Vector3(4, 0, 3));
-        deleteTheseCubes.Add(new Vector3(3, 0, 3));
-        deleteTheseCubes.Add(new Vector3(2, 0, 3));
-        deleteTheseCubes.Add(new Vector3(1, 0, 3));
-        DestroyListOfCubes(deleteTheseCubes);
-        deleteTheseCubes.Add(new Vector3(5, 0, 4));
-        deleteTheseCubes.Add(new Vector3(4, 0, 4));
-        deleteTheseCubes.Add(new Vector3(3, 0, 4));
-        deleteTheseCubes.Add(new Vector3(2, 0, 4));
-        deleteTheseCubes.Add(new Vector3(1, 0, 4));
-        DestroyListOfCubes(deleteTheseCubes);
+       
+        //StartCoroutine(DestroyFloorWithTimer());
 
 
+        
+        //RemoveFloorEdge();
+        //RemoveFloorEdge();
+        //List<Vector3> deleteTheseCubes = new List<Vector3>(10);
+        //deleteTheseCubes.Add(new Vector3(5, 0, 3));
+        //deleteTheseCubes.Add(new Vector3(4, 0, 3));
+        //deleteTheseCubes.Add(new Vector3(3, 0, 3));
+        //deleteTheseCubes.Add(new Vector3(2, 0, 3));
+        //deleteTheseCubes.Add(new Vector3(1, 0, 3));
+        //DestroyListOfCubes(deleteTheseCubes);
+        //deleteTheseCubes.Add(new Vector3(5, 0, 4));
+        //deleteTheseCubes.Add(new Vector3(4, 0, 3));
+        //deleteTheseCubes.Add(new Vector3(3, 0, 3));
+        //deleteTheseCubes.Add(new Vector3(2, 0, 3));
+        //deleteTheseCubes.Add(new Vector3(1, 0, 3));
+        //DestroyListOfCubes(deleteTheseCubes);
+        //deleteTheseCubes.Add(new Vector3(5, 0, 4));
+        //deleteTheseCubes.Add(new Vector3(4, 0, 4));
+        //deleteTheseCubes.Add(new Vector3(3, 0, 4));
+        //deleteTheseCubes.Add(new Vector3(2, 0, 4));
+        //deleteTheseCubes.Add(new Vector3(1, 0, 4));
+        //DestroyListOfCubes(deleteTheseCubes);
+    }
+    private void Start()
+    {
+        RemoveFloorEdge();
+        RemoveFloorEdge();
+    }
+    
+    private IEnumerator DestroyFloorWithTimer()
+    {
+        RemoveFloorEdge();
+        yield return new WaitForSeconds(10);
+        RemoveFloorEdge();
+        yield return new WaitForSeconds(10);
+        RemoveFloorEdge();
+        yield return new WaitForSeconds(10);
+        RemoveFloorEdge();
     }
 
     /// <summary>
@@ -76,15 +95,15 @@ public class EnviromentController : MonoBehaviour
     /// </summary>
     public void CreateFloor()
     {
-        floor.CreateFloor();
+        floor.CreateFloor();  //todo delete Debug statements
     } 
 
     /// <summary>
     /// BeginShrinkingFloor() should be called after creating a floor. It will trigger the edges of the floor to be destroyed over time.
     /// </summary>
-    public void BeginShrinkingFloor()
+    public void RemoveFloorEdge() 
     {
-        floor.BeginShrinkingFloor();
+        floor.RemoveFloorEdge(); //todo : How can I limit the ammount of times this function is called
     }
 
     /// <summary>
