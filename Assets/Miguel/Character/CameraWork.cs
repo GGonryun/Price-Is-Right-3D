@@ -8,15 +8,18 @@
 // <author>developer@exitgames.com</author>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Photon.Pun;
+using Photon.Realtime;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
 /// Camera work. Follow a target
 /// </summary>
-public class CameraWork : MonoBehaviour
+public class CameraWork : MonoBehaviourPunCallbacks
 {
     #region Private Fields
-
     [Tooltip("The distance in the local x-z plane to the target")]
     [SerializeField]
     private float distance = 7.0f;
@@ -37,22 +40,12 @@ public class CameraWork : MonoBehaviour
     [SerializeField]
     private bool followOnStart = false;
 
-    // cached transform of the target
-    Transform cameraTransform;
-
-    // maintain a flag internally to reconnect if target is lost or camera is switched
-    bool isFollowing;
-
-    // Represents the current velocity, this value is modified by SmoothDamp() every time you call it.
-    private float heightVelocity;
-
-    // Represents the position we are trying to reach using SmoothDamp()
-    private float targetHeight = 100000.0f;
-
+    [Tooltip("The offset of the height when spectating.")]
+    [SerializeField]
+    private float spectatorOffset = -5f;
     #endregion
 
     #region MonoBehaviour Callbacks
-
     /// <summary>
     /// MonoBehaviour method called on GameObject by Unity during initialization phase
     /// </summary>
@@ -63,7 +56,6 @@ public class CameraWork : MonoBehaviour
         {
             OnStartFollowing();
         }
-
     }
 
     /// <summary>
@@ -78,13 +70,20 @@ public class CameraWork : MonoBehaviour
             OnStartFollowing();
         }
 
-        // only follow is explicitly declared
-        if (isFollowing)
+        if (photonView.IsMine)
         {
-            Apply();
+            // only follow is explicitly declared
+            if (!isSpectating && isFollowing)
+            {
+                Follow();
+            }
+
+            if (!isFollowing && isSpectating)
+            {
+                Spectate();
+            }
         }
     }
-
     #endregion
 
     #region Public Methods
@@ -97,24 +96,60 @@ public class CameraWork : MonoBehaviour
     {
         cameraTransform = Camera.main.transform;
         isFollowing = true;
-        // we don't smooth anything, we go straight to the right camera shot
+        isSpectating = false;
         Cut();
     }
 
-    public void OnStopFollowing()
+    public override void OnPlayerLeftRoom(Player otherPlayer)
     {
+        players = GameObject.FindGameObjectsWithTag("Player").Select(obj => obj.transform).ToList();
+    }
+
+    public void Detach()
+    {
+        cameraTransform = Camera.main.transform;
+        cameraTransform.rotation = Quaternion.Euler(90, 0, 0);
+        players = GameObject.FindGameObjectsWithTag("Player").Select(obj => obj.transform).ToList();
+
+        if (photonView.IsMine)
+        {
+            foreach (Transform p in players)
+            {
+                Hero h = p.GetComponent<Hero>();
+                h.ShrinkSticker();
+            }
+        }
+
         isFollowing = false;
-        height = 10f;
-        Cut();
+        isSpectating = true;
     }
     #endregion
 
-    #region Private Methods
+    #region PRIVATES
+    /// <summary>
+    /// Watch all targets at the same time.
+    /// </summary>
+    void Spectate()
+    {
+        if (players.Count <= 0) return;
+
+        Vector3 camPos = cameraTransform.position;
+        Vector3 newPos = Vector3.zero;
+
+        float distance = Mathf.Sqrt(players.MaximumDistance());
+        distance /= Mathf.Tan(30 * Mathf.Deg2Rad) * 2;
+
+        newPos.x = players.Midpoint().x;
+        newPos.y += distance + heightSmoothLag;
+        newPos.z = players.Midpoint().z;
+
+        cameraTransform.position = Vector3.SmoothDamp(camPos, newPos, ref velocity, heightSmoothLag);
+    }
 
     /// <summary>
     /// Follow the target smoothly
     /// </summary>
-    void Apply()
+    void Follow()
     {
         Vector3 targetCenter = transform.position + centerOffset;
 
@@ -148,7 +183,6 @@ public class CameraWork : MonoBehaviour
         SetUpRotation(targetCenter);
     }
 
-
     /// <summary>
     /// Directly position the camera to a the specified Target and center.
     /// </summary>
@@ -157,7 +191,7 @@ public class CameraWork : MonoBehaviour
         float oldHeightSmooth = heightSmoothLag;
         heightSmoothLag = 0.001f;
 
-        Apply();
+        Follow();
 
         heightSmoothLag = oldHeightSmooth;
     }
@@ -179,5 +213,16 @@ public class CameraWork : MonoBehaviour
 
     }
 
+    List<Transform> players = new List<Transform>(20);
+    bool isSpectating = false;
+    Vector3 velocity = Vector3.zero;
+    // cached transform of the target
+    Transform cameraTransform = null;
+    // maintain a flag internally to reconnect if target is lost or camera is switched
+    bool isFollowing = false;
+    // Represents the current velocity, this value is modified by SmoothDamp() every time you call it.
+    private float heightVelocity;
+    // Represents the position we are trying to reach using SmoothDamp()
+    private float targetHeight = 100000.0f;
     #endregion
 }

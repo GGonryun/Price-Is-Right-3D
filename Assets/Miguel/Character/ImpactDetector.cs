@@ -1,12 +1,14 @@
+using System;
 using Photon.Pun;
 using UnityEngine;
+
+public delegate void OnDeathEventHandler(object sender, EventArgs e);
 
 public class ImpactDetector : MonoBehaviourPun, IPunObservable
 {
     public float Multiplier => multiplier;
-    public float Height => characterController.height;
 
-    [SerializeField] private float multiplier = 0;
+    public event OnDeathEventHandler OnDeath { add => onDeath += value; remove => onDeath -= value; }
 
     [Tooltip("")]
     [SerializeField]
@@ -15,50 +17,33 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
     #region UNITY CALLBACKS
     private void Awake()
     {
-        characterController = gameObject.GetComponent<CharacterController>();
-        if (!characterController)
-            Debug.LogError("<Color=Red> ImpactDetector <a></a></Color>is missing a CharacterController component !! ", this);
+        hero = gameObject.GetComponent<Hero>();
+        if (!hero)
+            Debug.LogError("<Color=Red> ImpactDetector <a></a></Color>is missing a Hero component !! ", this);
     }
 
     private void Update()
     {
-        if (isDead == true)
-            GameManager.Instance.OnClickLeave();
-
         ConsumeImpact();
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Deadzone"))
+            onDeath?.Invoke(this, new EventArgs());
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
             return;
-        if (other.gameObject.CompareTag("Deadzone"))
-            isDead = true;
 
         if (other.gameObject.CompareTag("Sword"))
-        {
-            Vector3 heading = other.transform.forward;
-            heading.y *= 0f;
-            currentMultiplier += swordMultiplier;
-            AddKnockback(heading, baseKnockback * swordInfluence * currentMultiplier);
-        }
-
+            multiplier = CalculateKnockback(other.transform, swordMultiplier, swordInfluence);
         if (other.gameObject.CompareTag("Arrow"))
-        {
-            Vector3 heading = other.transform.forward;
-            heading.y *= 0f;
-            currentMultiplier += arrowMultiplier;
-            AddKnockback(heading, baseKnockback * arrowInfluence * currentMultiplier);
-        }
-
+            multiplier = CalculateKnockback(other.transform, arrowMultiplier, arrowInfluence);
         if (other.gameObject.CompareTag("TwoHand"))
-        {
-            Vector3 heading = other.transform.forward;
-            heading.y *= 0f;
-            currentMultiplier += twoHandMultiplier;
-            AddKnockback(heading, baseKnockback * twoHandInfluence * currentMultiplier);
-        }
-        multiplier = currentMultiplier;
+            multiplier = CalculateKnockback(other.transform, twoHandMultiplier, twoHandInfluence);
     }
 
     private void OnParticleCollision(GameObject other)
@@ -66,18 +51,10 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
         //if it hits someone else don't react.
         if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
             return;
-        if (!other.gameObject.CompareTag("Spell"))
-            return;
-
-        //We only care about the movement in the x/z plane.
-        Vector3 heading = transform.position - other.transform.position;
-        heading.y *= 0f;
-
-        //Increase the knockback multiplier.
-        currentMultiplier += spellMultiplier;
-        multiplier = currentMultiplier;
-        AddKnockback(heading, baseKnockback * spellInfluence * currentMultiplier);
+        if (other.gameObject.CompareTag("Spell"))
+            multiplier = CalculateKnockback(other.transform, spellMultiplier, spellInfluence);
     }
+
     #endregion UNITY CALLBACKS
 
     #region PUN CALLBACKS
@@ -85,25 +62,23 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
     {
         if(stream.IsWriting)
         {
-            stream.SendNext(isDead);
             stream.SendNext(multiplier);
         }
         else
         {
-            isDead = (bool)stream.ReceiveNext();
             multiplier = (float)stream.ReceiveNext();
         }
     }
     #endregion PUN CALLBACKS
 
     #region PRIVATES
-    private void ConsumeImpact()
+    private float CalculateKnockback(Transform target, float multiplier, float influence)
     {
-        if (impact.sqrMagnitude > impactThreshold)
-        {
-            characterController.Move(impact * Time.deltaTime);
-            impact = Vector3.Lerp(impact, Vector3.zero, dissipationRate * Time.deltaTime);
-        }
+        Vector3 heading = target.forward;
+        heading.y *= 0f;
+        currentMultiplier += multiplier;
+        AddKnockback(heading, baseKnockback * influence * currentMultiplier);
+        return currentMultiplier;
     }
 
     private void AddKnockback(Vector3 direction, float force)
@@ -112,12 +87,22 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
         impact += _dir * force;
     }
 
-    private CharacterController characterController = null;
+    private void ConsumeImpact()
+    {
+        if (impact.sqrMagnitude > impactThreshold)
+        {
+            hero.Move(impact * Time.deltaTime);
+            impact = Vector3.Lerp(impact, Vector3.zero, dissipationRate * Time.deltaTime);
+        }
+    }
+
+    private OnDeathEventHandler onDeath;
+    private float multiplier = 0;
+    private Hero hero = null;
     private Vector3 impact = Vector3.zero;
     private float impactThreshold = 0.1f;
     private float dissipationRate = 5f;
     private float currentMultiplier = 1f;
-    private bool isDead = false;
 
     //Modify these values if you want the character taking damage to be influenced more heavily by the collision.
     //1 = 100%

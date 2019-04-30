@@ -7,7 +7,7 @@ public sealed class Hero : MonoBehaviourPun
 {
     public string Name => this.photonView.Owner.NickName;
     public float Multiplier => this.impactDetector.Multiplier;
-    public float Height => this.impactDetector.Height;
+    public float Height => this.characterController.height;
 
     [Tooltip("The hero's user interface prefab")]
     [SerializeField]
@@ -21,6 +21,20 @@ public sealed class Hero : MonoBehaviourPun
     [SerializeField]
     private Transform spawnPoint = null;
 
+    public void Move(Vector3 movement) => characterController.Move(movement);
+    public void ShrinkSticker() => playerSticker.Shrink();
+    #region CALLBACKS
+    public void DeactivatePlayer(object sender, System.EventArgs e)
+    {
+        active = false;
+        transform.position = new Vector3(0, -25f, 0);
+        cameraWork.Detach();
+        playerSticker.Detach();
+        characterController.enabled = false;
+        animationController.enabled = false;
+    }
+    #endregion CALLBACKS
+
     #region UNITY CALLBACKS
     private void Awake()
     {
@@ -32,42 +46,38 @@ public sealed class Hero : MonoBehaviourPun
             Debug.LogError("<Color=Red> Hero <a></a></Color>is missing an ImpactDetection component !! ", this);
         animationController = GetComponent<AnimationController>();
         if(!animationController)
-            Debug.LogError("<Color=Red> Hero <a></a></Color>is missing an AnimationController component !! ", this); 
+            Debug.LogError("<Color=Red> Hero <a></a></Color>is missing an AnimationController component !! ", this);
+        characterController = GetComponent<CharacterController>();
+        if(!characterController)
+            Debug.LogError("<Color=Red> Hero <a></a></Color>is missing a CharacterController component !! ", this);
     }
 
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+        impactDetector.OnDeath += DeactivatePlayer;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        impactDetector.OnDeath -= DeactivatePlayer;
     }
 
     private void Start()
     {
-        CreateSticker();
-        SetRandomColor();
+        active = true;
+        transform.position = new Vector3(0, 5f, 0);
 
         if (photonView.IsMine && PhotonNetwork.IsConnected == true)
             cameraWork.OnStartFollowing();
-    }
 
-    private void SetRandomColor()
-    {
-        Renderer _renderer = transform.GetChild(0).GetComponent<Renderer>();
-        MaterialPropertyBlock _block = new MaterialPropertyBlock();
-        int _id = Shader.PropertyToID("_Color");
-
-        _block.SetColor(_id, UnityEngine.Random.ColorHSV(0,1));
-        _renderer.SetPropertyBlock(_block);
-
+        CreateSticker();
     }
 
     private void Update()
     {
-        if (photonView.IsMine)
+        if (photonView.IsMine && active)
         {
             PlayerInput();
         }
@@ -109,7 +119,6 @@ public sealed class Hero : MonoBehaviourPun
             v = 0;
         float speed = (new Vector2(h, v).sqrMagnitude);
 
-
         animationController.Moving(speed);
 
         animationController.Rotating(h);
@@ -133,11 +142,14 @@ public sealed class Hero : MonoBehaviourPun
         else
         {
             GameObject go = Instantiate(heroUserInterfacePrefab) as GameObject;
-            PlayerSticker ps = go.GetComponent<PlayerSticker>();
-            ps.Link(this);
+            playerSticker = go.GetComponent<PlayerSticker>();
+            playerSticker.Link(this);
         }
     }
 
+    private bool active = false;
+    private PlayerSticker playerSticker = null;
+    private CharacterController characterController = null;
     private CameraWork cameraWork = null;
     private ImpactDetector impactDetector = null;
     private AnimationController animationController = null;

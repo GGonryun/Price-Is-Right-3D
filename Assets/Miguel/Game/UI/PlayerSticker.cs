@@ -35,6 +35,10 @@ public class PlayerSticker : MonoBehaviour
     [Tooltip("Pixel offset from the player target")]
     public Vector3 ScreenOffset = new Vector3(0f, 30f, 0f);
 
+    [Tooltip("")]
+    [SerializeField]
+    private float shrinkRatio = 0.25f;
+
     public void Link(Hero hero)
     {
         this.hero = hero;
@@ -42,6 +46,8 @@ public class PlayerSticker : MonoBehaviour
         characterHeight = hero.Height;
         targetTransform = hero.transform;
     }
+    public void Detach() => hero = null;
+    public void Shrink() => this.transform.localScale = Vector3.one * shrinkRatio;
 
     #region UNITY CALLBACKS
     private void Awake()
@@ -51,9 +57,12 @@ public class PlayerSticker : MonoBehaviour
 
     private void Update()
     {
-
         if (hero == null)
+        {
             Destroy(this.gameObject);
+            return;
+        }
+
         PlayerStatus.color = SelectColor((int)hero.Multiplier);
     }
 
@@ -87,7 +96,6 @@ public class PlayerSticker : MonoBehaviour
                 return colorSevere;
         }
     }
-
 
     private Hero hero;
     private float characterHeight = 0f;

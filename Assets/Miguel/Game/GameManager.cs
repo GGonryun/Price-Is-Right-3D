@@ -49,8 +49,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         StartGame();
 
-        PhotonNetwork.Instantiate(Settings.Instance.Character.ToString(), new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+        GameObject _go = PhotonNetwork.Instantiate(Settings.Instance.Character.ToString(), new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
     }
+
     #endregion UNITY CALLBACKS
 
     #region PUN CALLBACKS
@@ -86,13 +87,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    void LoadArena()
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.LoadLevel("Game");
-        }
-    }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
@@ -115,6 +109,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     #endregion UI CALLBACKS
 
     #region UTILITY
+    private void LoadArena()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("Game");
+        }
+    }
+
     private async void StartGame()
     {
         environmentController.Initialize();
@@ -136,6 +138,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log("Game Complete");
     }
 
+    private List<Transform> players = new List<Transform>(20);
     private IEnvironmentController environmentController;
     #endregion UTILITY
 
