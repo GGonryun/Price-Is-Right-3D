@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class ImpactDetector : MonoBehaviourPun, IPunObservable
 {
-    public float Multiplier => currentMultiplier;
+    public float Multiplier => multiplier;
     public float Height => characterController.height;
 
+    [SerializeField] private float multiplier = 0;
 
 
     [Tooltip("")]
@@ -58,6 +59,7 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
             currentMultiplier += twoHandMultiplier;
             AddKnockback(heading, baseKnockback * twoHandInfluence * currentMultiplier);
         }
+        multiplier = currentMultiplier;
     }
 
     private void OnParticleCollision(GameObject other)
@@ -74,6 +76,7 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
 
         //Increase the knockback multiplier.
         currentMultiplier += spellMultiplier;
+        multiplier = currentMultiplier;
         AddKnockback(heading, baseKnockback * spellInfluence * currentMultiplier);
     }
     #endregion UNITY CALLBACKS
@@ -84,10 +87,12 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
         if(stream.IsWriting)
         {
             stream.SendNext(isDead);
+            stream.SendNext(multiplier);
         }
         else
         {
             isDead = (bool)stream.ReceiveNext();
+            multiplier = (float)stream.ReceiveNext();
         }
     }
     #endregion PUN CALLBACKS

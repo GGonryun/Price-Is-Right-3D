@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using Photon.Pun;
 public class PlayerSticker : MonoBehaviour
 {
     [Header("Player UI Elements")]
@@ -12,9 +12,6 @@ public class PlayerSticker : MonoBehaviour
     [Tooltip("")]
     [SerializeField]
     private Image PlayerStatus = null;
-    [Tooltip("")]
-    [SerializeField]
-    private Text PlayerMultiplier = null;
 
     [Header("Color Elements")]
     [Tooltip("")]
@@ -32,6 +29,9 @@ public class PlayerSticker : MonoBehaviour
     [Tooltip("")]
     [SerializeField]
     private Color colorCritical = Color.white;
+    [Tooltip("")]
+    [SerializeField]
+    private Color colorSevere = Color.white;
 
     [Header("Settings")]
     [Tooltip("Pixel offset from the player target")]
@@ -50,12 +50,13 @@ public class PlayerSticker : MonoBehaviour
     {
         transform.SetParent(GameObject.Find("Canvas").transform);
     }
+
     private void Update()
     {
+
         if (hero == null)
             Destroy(this.gameObject);
-        PlayerStatus.color = SelectColor(Mathf.FloorToInt(hero.Multiplier));
-        PlayerMultiplier.text = hero.Multiplier.ToString("0.00");
+        PlayerStatus.color = SelectColor((int)hero.Multiplier);
     }
 
     private void LateUpdate()
@@ -67,7 +68,6 @@ public class PlayerSticker : MonoBehaviour
     #endregion UNITY CALLBACKS
 
     #region PRIVATES
-
     private Color SelectColor(int i)
     {
         if (i < 0) i = 0;
@@ -75,18 +75,22 @@ public class PlayerSticker : MonoBehaviour
         switch(i)
         {
             case 0:
-                return colorBase;
             case 1:
+                return colorBase;
             case 2:
                 return colorSafe;
             case 3:
                 return colorWarning;
             case 4:
                 return colorDanger;
-            default:
+            case 5:
                 return colorCritical;
+            default:
+                return colorSevere;
         }
     }
+
+
     private Hero hero;
     private float characterHeight = 0f;
     private Transform targetTransform;
