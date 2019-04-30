@@ -49,8 +49,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         StartGame();
 
-        PhotonNetwork.Instantiate(Settings.Instance.Character.ToString(), new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+        GameObject _go = PhotonNetwork.Instantiate(Settings.Instance.Character.ToString(), new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
     }
+
     #endregion UNITY CALLBACKS
 
     #region PUN CALLBACKS
@@ -136,6 +137,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log("Game Complete");
     }
 
+    private List<Transform> players = new List<Transform>(20);
     private IEnvironmentController environmentController;
     #endregion UTILITY
 

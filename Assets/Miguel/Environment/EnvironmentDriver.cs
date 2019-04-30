@@ -44,8 +44,8 @@ public class EnvironmentDriver : MonoBehaviour, IEnvironmentController
         Renderer _cubeRenderer = cubes[state].GetComponent<Renderer>();
 
         MaterialPropertyBlock _materialBlock = new MaterialPropertyBlock();
-        int _id = Shader.PropertyToID("_Color");
-        _materialBlock.SetColor(_id, Color.red);
+        int id = Shader.PropertyToID("_Color");
+        _materialBlock.SetColor(id, Color.red);
         _cubeRenderer.SetPropertyBlock(_materialBlock);
 
         return true;
