@@ -111,7 +111,7 @@ public class CameraWork : MonoBehaviourPunCallbacks
         cameraTransform.rotation = Quaternion.Euler(90, 0, 0);
         players = GameObject.FindGameObjectsWithTag("Player").Select(obj => obj.transform).ToList();
 
-        if (photonView.IsMine)
+        if (photonView.IsMine && players != null && players.Count > 0)
         {
             foreach (Transform p in players)
             {

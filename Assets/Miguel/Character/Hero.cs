@@ -27,11 +27,12 @@ public sealed class Hero : MonoBehaviourPun
     public void DeactivatePlayer(object sender, System.EventArgs e)
     {
         active = false;
-        transform.position = new Vector3(0, -25f, 0);
+        transform.position = new Vector3(0, -20f, 0);
         cameraWork.Detach();
         playerSticker.Detach();
+        animationController.Moving(0);
         characterController.enabled = false;
-        animationController.enabled = false;
+        animationController.Animator.enabled = false;
     }
     #endregion CALLBACKS
 

@@ -13,6 +13,8 @@ public class AnimationController : MonoBehaviourPun
     [Tooltip("Multiplier for the base animation speed.")]
     [SerializeField]
     float attackSpeed = 1f;
+
+    public Animator Animator => animator;
     public void Moving(float speed)
     {
         animator.SetBool("Moving", (speed > 0f) ? true : false);
