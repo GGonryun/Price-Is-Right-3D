@@ -8,7 +8,6 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
 
     [SerializeField] private float multiplier = 0;
 
-
     [Tooltip("")]
     [SerializeField]
     private float baseKnockback = 10f;

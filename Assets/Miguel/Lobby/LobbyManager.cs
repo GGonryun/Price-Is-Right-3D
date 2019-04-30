@@ -227,7 +227,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
 
 
-    private const string _version = "2";
+    private const string _version = "3";
     private const short _errorRoomDoesNotExist = 32760;
     [System.NonSerialized] private Dictionary<string, Text> playerList = new Dictionary<string, Text>(8);
     #endregion PRIVATES

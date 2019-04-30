@@ -1,6 +1,5 @@
+using System;
 using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -49,9 +48,21 @@ public sealed class Hero : MonoBehaviourPun
     private void Start()
     {
         CreateSticker();
+        SetRandomColor();
 
         if (photonView.IsMine && PhotonNetwork.IsConnected == true)
             cameraWork.OnStartFollowing();
+    }
+
+    private void SetRandomColor()
+    {
+        Renderer _renderer = transform.GetChild(0).GetComponent<Renderer>();
+        MaterialPropertyBlock _block = new MaterialPropertyBlock();
+        int _id = Shader.PropertyToID("_Color");
+
+        _block.SetColor(_id, UnityEngine.Random.ColorHSV(0,1));
+        _renderer.SetPropertyBlock(_block);
+
     }
 
     private void Update()
@@ -97,6 +108,7 @@ public sealed class Hero : MonoBehaviourPun
         if (v < 0)
             v = 0;
         float speed = (new Vector2(h, v).sqrMagnitude);
+
 
         animationController.Moving(speed);
 

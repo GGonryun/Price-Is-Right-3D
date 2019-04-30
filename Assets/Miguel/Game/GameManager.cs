@@ -8,16 +8,38 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+    public static GameManager Instance = null;
 
     [Header("User Interface")]
     [Tooltip("")]
     [SerializeField]
     private Button exit = null;
 
+    [Tooltip("")]
+    [SerializeField]
+    private Text information = null;
+
+    [Header("Environment Timers")]
+    [Tooltip("")]
+    [SerializeField]
+    private float gameDelay = 50f;
+
+    [Tooltip("")]
+    [SerializeField]
+    private float paintDelay = 5f;
+
+    [Tooltip("")]
+    [SerializeField]
+    private float roundDelay = 10f;
+
     #region UNITY CALLBACKS
     private void Awake()
     {
         Instance = this;
+        environmentController = GetComponent<IEnvironmentController>();
+        if (environmentController == null)
+            Debug.LogError("<Color=Red> GameManager <a></a></Color>is missing an IEnvironmentController component !! ", this);
+
     }
 
     /// <summary>
@@ -93,12 +115,29 @@ public class GameManager : MonoBehaviourPunCallbacks
     #endregion UI CALLBACKS
 
     #region UTILITY
-    public void StartGame()
+    private async void StartGame()
     {
-        Debug.Log("Starting the game ... ");
+        environmentController.Initialize();
+        await new WaitForSeconds(gameDelay);
+        DriveEnvironment();
     }
+
+    private async void DriveEnvironment()
+    {
+        bool hasNext = true;
+        while (hasNext)
+        {
+            await new WaitForSeconds(roundDelay);
+            hasNext = environmentController.Paint();
+
+            await new WaitForSeconds(paintDelay);
+            hasNext = environmentController.Release();
+        }
+        Debug.Log("Game Complete");
+    }
+
+    private IEnvironmentController environmentController;
     #endregion UTILITY
 
-    public static GameManager Instance = null;
 
 }

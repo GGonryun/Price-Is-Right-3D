@@ -101,6 +101,12 @@ public class CameraWork : MonoBehaviour
         Cut();
     }
 
+    public void OnStopFollowing()
+    {
+        isFollowing = false;
+        height = 10f;
+        Cut();
+    }
     #endregion
 
     #region Private Methods
