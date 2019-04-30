@@ -203,7 +203,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6962993373573964123
 Transform:
   m_ObjectHideFlags: 0
@@ -285,7 +285,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: d2c0943173fa94146bd1b04b5438a19d, type: 3}
       propertyPath: m_Name
-      value: Archer
+      value: Rogue
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: d2c0943173fa94146bd1b04b5438a19d, type: 3}
       propertyPath: m_TagString

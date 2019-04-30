@@ -803,7 +803,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Knight
       m_Image: {fileID: 0}
-    - m_Text: Archer
+    - m_Text: Rogue
       m_Image: {fileID: 0}
     - m_Text: Warrior
       m_Image: {fileID: 0}
