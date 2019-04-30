@@ -12,6 +12,9 @@ public class PlayerSticker : MonoBehaviour
     [Tooltip("")]
     [SerializeField]
     private Image PlayerStatus = null;
+    [Tooltip("")]
+    [SerializeField]
+    private Text PlayerMultiplier = null;
 
     [Header("Color Elements")]
     [Tooltip("")]
@@ -52,6 +55,7 @@ public class PlayerSticker : MonoBehaviour
         if (hero == null)
             Destroy(this.gameObject);
         PlayerStatus.color = SelectColor(Mathf.FloorToInt(hero.Multiplier));
+        PlayerMultiplier.text = hero.Multiplier.ToString("0.00");
     }
 
     private void LateUpdate()
