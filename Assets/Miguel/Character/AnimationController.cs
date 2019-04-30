@@ -6,10 +6,15 @@ using UnityEngine;
 public class AnimationController : MonoBehaviourPun
 {
     [Header("Animation Settings")]
-    [Tooltip("")]
+    [Tooltip("How quickly this player will rotate.")]
     [SerializeField]
-    float turningPower = 250;
-
+    float turningSpeed = 250;
+    [Tooltip("Multiplier for the base movement speed.")]
+    [SerializeField]
+    float movementSpeed = 1f;
+    [Tooltip("Multiplier for the base animation speed.")]
+    [SerializeField]
+    float attackSpeed = 1f;
     public void Moving(float speed)
     {
         animator.SetBool("Moving", (speed > 0f) ? true : false);
@@ -22,20 +27,13 @@ public class AnimationController : MonoBehaviourPun
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Attack1"))
             return;
         Quaternion targetRotation = Quaternion.Euler(0, transform.eulerAngles.y + (h > 0 ? 10 : -10), 0);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, this.turningPower * Time.deltaTime);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, this.turningSpeed * Time.deltaTime);
     }
 
     public void Attack(bool inUse)
     {
         if (inUse)
             animator.SetTrigger("Attack1Trigger");
-    }
-
-    public void Defend(float delta)
-    {
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Attack1"))
-            return;
-        animator.SetFloat("Input X", delta);
     }
 
     #region UNITY CALLBACKS
@@ -48,6 +46,13 @@ public class AnimationController : MonoBehaviourPun
         Animator.StringToHash("Attack1Trigger");
         Animator.StringToHash("Moving");
         Animator.StringToHash("Input X");
+        Animator.StringToHash("Input Z");
+    }
+
+    private void Start()
+    {
+        animator.SetFloat("Input X", movementSpeed);
+        animator.SetFloat("Input Z", attackSpeed);
     }
     #endregion UNITY CALLBACKS
 

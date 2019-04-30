@@ -137,7 +137,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dd6df33c6d3c894dbdf7f6395cc8a0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turningPower: 300
+  turningSpeed: 250
+  movementSpeed: 1.75
+  attackSpeed: 1.5
 --- !u!114 &1179942155601588997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5e0063faa29fd84fab525e0e8ccaf92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseKnockback: 20
+  baseKnockback: 15
 --- !u!114 &7119544799354663474
 MonoBehaviour:
   m_ObjectHideFlags: 0

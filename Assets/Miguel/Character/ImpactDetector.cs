@@ -3,8 +3,11 @@ using UnityEngine;
 
 public class ImpactDetector : MonoBehaviourPun, IPunObservable
 {
-    public float Multiplier => multiplier;
+    public float Multiplier => currentMultiplier;
     public float Height => characterController.height;
+
+
+
     [Tooltip("")]
     [SerializeField]
     private float baseKnockback = 10f;
@@ -34,32 +37,26 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
 
         if (other.gameObject.CompareTag("Sword"))
         {
-            Debug.Log($"Trigger Enter Detected Hit: {photonView.Owner.NickName}, {other.gameObject.name}");
-
             Vector3 heading = other.transform.forward;
             heading.y *= 0f;
-            multiplier += .5f;
-            AddKnockback(heading, baseKnockback * multiplier);
+            currentMultiplier += swordMultiplier;
+            AddKnockback(heading, baseKnockback * swordInfluence * currentMultiplier);
         }
 
         if (other.gameObject.CompareTag("Arrow"))
         {
-            Debug.Log($"Trigger Enter Detected Hit: {photonView.Owner.NickName}, {other.gameObject.name}");
-
             Vector3 heading = other.transform.forward;
             heading.y *= 0f;
-            multiplier += .25f;
-            AddKnockback(heading, (baseKnockback/2f) * multiplier);
+            currentMultiplier += arrowMultiplier;
+            AddKnockback(heading, baseKnockback * arrowInfluence * currentMultiplier);
         }
 
         if (other.gameObject.CompareTag("TwoHand"))
         {
-            Debug.Log($"Trigger Enter Detected Hit: {photonView.Owner.NickName}, {other.gameObject.name}");
-
             Vector3 heading = other.transform.forward;
             heading.y *= 0f;
-            multiplier += .75f;
-            AddKnockback(heading, (baseKnockback) * multiplier);
+            currentMultiplier += twoHandMultiplier;
+            AddKnockback(heading, baseKnockback * twoHandInfluence * currentMultiplier);
         }
     }
 
@@ -76,8 +73,8 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
         heading.y *= 0f;
 
         //Increase the knockback multiplier.
-        multiplier += .5f;
-        AddKnockback(heading, baseKnockback * multiplier);
+        currentMultiplier += spellMultiplier;
+        AddKnockback(heading, baseKnockback * spellInfluence * currentMultiplier);
     }
     #endregion UNITY CALLBACKS
 
@@ -114,9 +111,22 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
     private CharacterController characterController = null;
     private Vector3 impact = Vector3.zero;
     private float impactThreshold = 0.1f;
-    private float dissipationRate = 4f;
-    private float multiplier = 1f;
+    private float dissipationRate = 5f;
+    private float currentMultiplier = 1f;
     private bool isDead = false;
+
+    //Modify these values if you want the character taking damage to be influenced more heavily by the collision.
+    //1 = 100%
+    private float arrowInfluence = .5f;
+    private float swordInfluence = 1.1f;
+    private float twoHandInfluence = 1.5f;
+    private float spellInfluence = .9f;
+
+    //These values represent how much we will increment our multiplier by each collision.
+    private float arrowMultiplier = .25f;
+    private float swordMultiplier = .5f;
+    private float twoHandMultiplier = .9f;
+    private float spellMultiplier = .5f;
     #endregion PRIVATES
 
 }

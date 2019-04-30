@@ -12,7 +12,7 @@ public sealed class Hero : MonoBehaviourPun
 
     [Tooltip("The hero's user interface prefab")]
     [SerializeField]
-    protected GameObject heroUserInterfacePrefab = null;
+    private GameObject heroUserInterfacePrefab = null;
 
     [Tooltip("This object will be instantiated after attacking.")]
     [SerializeField]
@@ -64,27 +64,13 @@ public sealed class Hero : MonoBehaviourPun
 
     #endregion UNITY CALLBACKS
 
-    #region ASTRACT
-
+    #region PUN CALLBACKS
     [PunRPC]
     private void Primary(Vector3 position, Quaternion rotation, PhotonMessageInfo info)
     {
         GameObject obj = Instantiate(spellPrefab, position, rotation) as GameObject;
         Spell spell = obj.GetComponent<Spell>();
         Spell.Link(spell, photonView.Owner);
-    }
-
-    private void Hit()
-    {
-        if (photonView.IsMine)
-        {
-            photonView.RPC("Primary", RpcTarget.AllViaServer, spawnPoint.position, spawnPoint.rotation);
-        }
-    }
-
-    private float Secondary()
-    {
-        return 1f;
     }
     #endregion ABSTRACT
 
@@ -93,6 +79,13 @@ public sealed class Hero : MonoBehaviourPun
 
     private void FootR() { }
 
+    private void Hit()
+    {
+        if (photonView.IsMine)
+        {
+            photonView.RPC("Primary", RpcTarget.AllViaServer, spawnPoint.position, spawnPoint.rotation);
+        }
+    }
     #endregion ANIMATION CALLBACKS
 
     #region PRIVATES
@@ -110,8 +103,6 @@ public sealed class Hero : MonoBehaviourPun
         animationController.Rotating(h);
 
         animationController.Attack(attack);
-        
-        animationController.Defend(Secondary());
     }
 
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode loadingMode)
