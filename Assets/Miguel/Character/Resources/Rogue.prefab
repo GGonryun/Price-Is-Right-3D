@@ -140,7 +140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turningSpeed: 150
   movementSpeed: 1.5
-  attackSpeed: 1.5
+  attackSpeed: 1.25
 --- !u!114 &1179942155601588997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5e0063faa29fd84fab525e0e8ccaf92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseKnockback: 15
+  baseKnockback: 20
 --- !u!114 &7119544799354663474
 MonoBehaviour:
   m_ObjectHideFlags: 0
