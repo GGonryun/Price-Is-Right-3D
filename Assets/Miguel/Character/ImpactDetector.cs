@@ -25,12 +25,11 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
     private void Update()
     {
         ConsumeImpact();
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("Deadzone"))
+        if (transform.position.y <= floorThreshold)
+        {
             onDeath?.Invoke(this, new EventArgs());
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -96,6 +95,7 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
         }
     }
 
+    private float floorThreshold = -20f;
     private OnDeathEventHandler onDeath;
     private float multiplier = 0;
     private Hero hero = null;
