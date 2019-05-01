@@ -1,1 +1,0 @@
-Don't forget to uncheck "loop" in all particles!
