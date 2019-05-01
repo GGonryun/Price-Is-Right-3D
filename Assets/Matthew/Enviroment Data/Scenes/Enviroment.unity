@@ -493,12 +493,12 @@ PrefabInstance:
     - target: {fileID: 802729702415949147, guid: 4fec08457b612d648a8dca377a1e9c6e,
         type: 3}
       propertyPath: numCubesInXDir
-      value: 100
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 802729702415949147, guid: 4fec08457b612d648a8dca377a1e9c6e,
         type: 3}
       propertyPath: numCubesInZDir
-      value: 100
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fec08457b612d648a8dca377a1e9c6e, type: 3}
