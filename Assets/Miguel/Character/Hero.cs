@@ -118,7 +118,7 @@ public sealed class Hero : MonoBehaviourPun
         float v = Input.GetAxis("Vertical");
         if (v < 0)
             v = 0;
-        float speed = (new Vector2(h, v).sqrMagnitude);
+        float speed = (new Vector2(0, v).sqrMagnitude);
 
         animationController.Moving(speed);
 
