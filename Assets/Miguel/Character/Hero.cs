@@ -23,6 +23,7 @@ public sealed class Hero : MonoBehaviourPun
 
     public void Move(Vector3 movement) => characterController.Move(movement);
     public void ShrinkSticker() => playerSticker.Shrink();
+   
     #region CALLBACKS
     public void DeactivatePlayer(object sender, System.EventArgs e)
     {
@@ -31,6 +32,7 @@ public sealed class Hero : MonoBehaviourPun
         cameraWork.Detach();
         playerSticker.Detach();
         animationController.Moving(0);
+
         characterController.enabled = false;
         animationController.Animator.enabled = false;
     }

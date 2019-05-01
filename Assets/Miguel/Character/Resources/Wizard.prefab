@@ -30,7 +30,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dd6df33c6d3c894dbdf7f6395cc8a0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turningSpeed: 250
+  turningSpeed: 150
   movementSpeed: 1.25
   attackSpeed: 1.2
 --- !u!114 &1524785908
@@ -131,10 +131,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd08475b23aa548b7b9d28397d430b32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 7
-  height: 3
+  distance: 9
+  height: 7
   heightSmoothLag: 0.3
-  centerOffset: {x: 0, y: 0, z: 0}
+  centerOffset: {x: 0, y: 3, z: 0}
   followOnStart: 0
   spectatorOffset: -5
 --- !u!114 &3813889068600297523
