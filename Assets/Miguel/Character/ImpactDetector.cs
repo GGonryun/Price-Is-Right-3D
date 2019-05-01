@@ -109,7 +109,7 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
     private float arrowInfluence = .5f;
     private float swordInfluence = 1.1f;
     private float twoHandInfluence = 1.5f;
-    private float spellInfluence = .9f;
+    private float spellInfluence = 1.0f;
 
     //These values represent how much we will increment our multiplier by each collision.
     private float arrowMultiplier = .25f;
