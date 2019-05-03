@@ -2,43 +2,56 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(EnvironmentController))]
 public class GameManager : MonoBehaviour
 {
-    IEnviroment enviroment;
-    [SerializeField] GameObject cubePrefab;
-    [SerializeField] int numCubesInXDir = 10;
-    [SerializeField] int numCubesInZDir = 10;
-
+    //[SerializeField] private IEnvironmentController environment; // if you create an interface then you can't utilize `if(!environment){}`
+   [SerializeField] 
+   private EnvironmentController environment = null;
+   
+    /// <summary>
+    /// Awake is used to initialize any variables or game state before the game starts.
+    /// </summary>
     private void Awake()
     {
-        enviroment = gameObject.AddComponent<EnviromentController>();
-        enviroment.Initialize(cubePrefab, numCubesInXDir , numCubesInZDir);
-    }
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        StartCoroutine(DestroyFloorWithTimer());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        environment = gameObject.GetComponent<EnvironmentController>();
+        if(!environment){
+            Debug.LogError("<Color=Red> GameManager <a></a></Color>is missing a EnvironmentController component !! ", this);
+        }
+        else
+        {
+           environment.Initialize(); 
+        }
         
     }
+    
+    /// <summary>
+    /// Start is called before the first frame update
+    /// </summary>
+    void Start()
+    {
+        if(environment){
+            StartCoroutine(DestroyFloorWithTimer());
+        }
+    }
+
+
+    /// <summary>
+    /// This function will paint and then release the floor edges in a timely manner
+    /// </summary>
     private IEnumerator DestroyFloorWithTimer()
     {
-        enviroment.Paint();
+        environment.Paint();
         yield return new WaitForSeconds(2);
-        enviroment.Release();
+        environment.Release();
         yield return new WaitForSeconds(5);
-        enviroment.Paint();
+        environment.Paint();
         yield return new WaitForSeconds(2);
-        enviroment.Release();
+        environment.Release();
         yield return new WaitForSeconds(5);
-        enviroment.Paint();
+        environment.Paint();
         yield return new WaitForSeconds(2);
-        enviroment.Release();
+        environment.Release();
         yield return new WaitForSeconds(5);
     }
 }

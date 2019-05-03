@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IEnviroment
+public interface IEnvironmentController
 {
-    bool Initialize(GameObject floorTileprefab, int numOfCubesInXDir, int numOfCubesInZDir);
+    bool Initialize();
     bool Paint();
     bool Release();
 }

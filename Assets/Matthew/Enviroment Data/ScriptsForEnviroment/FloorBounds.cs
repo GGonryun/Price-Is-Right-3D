@@ -25,39 +25,39 @@
     public int NumOfCubesInXDir { get => numOfCubesInXDir; set => numOfCubesInXDir = value; }
     public int NumOfCubesInZDir { get => numOfCubesInZDir; set => numOfCubesInZDir = value; }
 
-    public FloorBounds(int numOfCubesInXDir, int numOfCubesInZDir)
+    public FloorBounds(int numCubesInXDir, int numCubesInZDir)
     {
-        NumOfCubesInXDir = numOfCubesInXDir;
-        NumOfCubesInZDir = numOfCubesInZDir;
+        NumOfCubesInXDir = numCubesInXDir;
+        NumOfCubesInZDir = numCubesInZDir;
 
         if ((NumOfCubesInXDir % 2) == 0)
         {
             MinBoundXCoord = 0;
-            MaxBoundXCoord = numOfCubesInXDir;
-            MinBoundXCoordLimit = (int)(numOfCubesInXDir / 2);
-            MaxBoundXCoordLimit = numOfCubesInXDir - (int)(numOfCubesInXDir / 2); // exclusive; maxBoundX should not decrement if maxBoundX is == maxBoundxLimit
+            MaxBoundXCoord = numCubesInXDir;
+            MinBoundXCoordLimit = (int)(numCubesInXDir / 2);
+            MaxBoundXCoordLimit = numCubesInXDir - (int)(numCubesInXDir / 2); // exclusive; maxBoundX should not decrement if maxBoundX is == maxBoundxLimit
         }
         else
         {
             MinBoundXCoord = 0;
-            MaxBoundXCoord = numOfCubesInXDir;
-            MinBoundXCoordLimit = (int)(numOfCubesInXDir / 2) + 1;
-            MaxBoundXCoordLimit = (int)(numOfCubesInXDir / 2) + 1;
+            MaxBoundXCoord = numCubesInXDir;
+            MinBoundXCoordLimit = (int)(numCubesInXDir / 2) + 1;
+            MaxBoundXCoordLimit = (int)(numCubesInXDir / 2) + 1;
         }
 
         if ((NumOfCubesInZDir % 2) == 0)
         {
             MinBoundZCoord = 0;
-            MaxBoundZCoord = numOfCubesInZDir;
-            MinBoundZCoordLimit = (int)(numOfCubesInZDir / 2);
-            MaxBoundZCoordLimit = numOfCubesInZDir - (int)(numOfCubesInZDir / 2);
+            MaxBoundZCoord = numCubesInZDir;
+            MinBoundZCoordLimit = (int)(numCubesInZDir / 2);
+            MaxBoundZCoordLimit = numCubesInZDir - (int)(numCubesInZDir / 2);
         }
         else
         {
             MinBoundZCoord = 0;
-            MaxBoundZCoord = numOfCubesInZDir;
-            MinBoundZCoordLimit = (int)(numOfCubesInZDir / 2) + 1;
-            MaxBoundZCoordLimit = numOfCubesInZDir - (int)(numOfCubesInZDir / 2);
+            MaxBoundZCoord = numCubesInZDir;
+            MinBoundZCoordLimit = (int)(numCubesInZDir / 2) + 1;
+            MaxBoundZCoordLimit = numCubesInZDir - (int)(numCubesInZDir / 2);
 
         }
     }
