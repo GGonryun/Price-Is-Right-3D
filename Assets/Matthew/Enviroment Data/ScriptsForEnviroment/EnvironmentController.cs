@@ -14,6 +14,7 @@ public class EnvironmentController : MonoBehaviour, IEnvironmentController
     
     /// <summary>
     /// Awake is used to initialize any variables or game state before the game starts.
+    /// Awake will initialize the floor game object.
     /// </summary>
     private void Awake() {
         floor = gameObject.GetComponent<Floor>();
@@ -23,7 +24,10 @@ public class EnvironmentController : MonoBehaviour, IEnvironmentController
     }
 
     /// <summary>
-    /// Initializer for creating a Floor using multiple cubes as game objects . 
+    /// Initializer for creating a Floor using multiple cubes as game objects. 
+    /// Side Effects: 
+    /// The floor object will initialize floor bounds which controls selecting outer edges of the floor object.
+    /// The floor object will create a dictionary of game objects positioned between the floor bounds, called mapOfCubes.
     /// </summary>
     /// <returns> A boolean value to signify if the initialization was successful or not. </returns>
     public bool Initialize()
@@ -43,16 +47,20 @@ public class EnvironmentController : MonoBehaviour, IEnvironmentController
 
     /// <summary>
     /// Changes the color of each outer edge floor tile
+    /// Side Effects: 
+    /// A list of Game Objects called outerEdges will be populated with references to the current outer edges of the floor.
     /// </summary>
     /// <returns> A boolean value to signify if the change of color was successful or not. </returns>
     public bool Paint()
     {
         bool paintSuccessful = true;
         
+        
         if(floor.UpdateListOfOuterEdgeTiles() == false){
             Debug.LogError("<Color=Red> EnvironmentController <a></a></Color> couldn't paint !!", this);
             return false;
         }  
+
         for (int idxNum = 0; idxNum < floor.outerEdges.Count; idxNum++)
         {
             GameObject go = floor.outerEdges[idxNum];
@@ -72,12 +80,14 @@ public class EnvironmentController : MonoBehaviour, IEnvironmentController
         for (int idxNum = 0; idxNum < floor.outerEdges.Count; idxNum++)
         {
             GameObject go = floor.outerEdges[idxNum];
-            go.SendMessage("UnfreezeConstraints");
-            go.SendMessage("ApplyGravity");   
+            go.SendMessage("UnfreezeConstraints", SendMessageOptions.RequireReceiver);
+            go.SendMessage("ApplyGravity", SendMessageOptions.RequireReceiver);
+            //test
+
         }
-        floor.UpdateBounds();
-    
-        return releaseSuccessful;
+        
+        return floor.UpdateBounds(); 
+        
     }
 
 }

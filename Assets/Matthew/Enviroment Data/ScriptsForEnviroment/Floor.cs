@@ -68,7 +68,7 @@ public class Floor : MonoBehaviour
                 Vector3 tempVector3 = CreateVector3(currXIndex, currZIndex);
                 GameObject cube = CreateGameObject(tempVector3);
                 if (cube == null){
-                    Debug.LogError("<Color=Red> Floor <a></a></Color> could not create floor because  !!", this);
+                    Debug.LogError("<Color=Red> Floor <a></a></Color> could not create floor because  !!", this); // todo: give a reason
                     return false;
                 }
                 mapOfCubes[tempVector3] = cube;
@@ -106,7 +106,6 @@ public class Floor : MonoBehaviour
     /// </summary>
     internal bool UpdateListOfOuterEdgeTiles()
     {
-        if(bounds.UpdateBounds() == false){ throw new System.NotImplementedException(); }
         outerEdges.Clear();
         for (int currentZIdx = bounds.MinBoundZCoord; currentZIdx < bounds.MaxBoundZCoord; currentZIdx++)
         {
@@ -131,7 +130,7 @@ public class Floor : MonoBehaviour
             }
         }
         if(outerEdges.Count == 0){
-            Debug.LogError("<Color=Red> Floor <a></a></Color> couldn't update outerEdges List because there are no more active edges !!", this);
+            Debug.LogError("<Color=Red> Floor <a></a></Color> couldn't UpdateListOfOuterEdgeTiles because there are no more active edges !!", this);
             return false;
         } 
         return true;
