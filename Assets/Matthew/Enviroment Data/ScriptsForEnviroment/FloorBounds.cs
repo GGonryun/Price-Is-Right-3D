@@ -1,5 +1,6 @@
-﻿public class FloorBounds
-{
+﻿using UnityEngine;
+
+public class FloorBounds : MonoBehaviour {
 
     private int numOfCubesInXDir;
     private int numOfCubesInZDir;
@@ -13,6 +14,9 @@
     private int maxBoundZCoord;
     private int minBoundZCoordLimit;
     private int maxBoundZCoordLimit;
+    
+    private int numLayersTopNotDestroy = 1; //todo - should I set this through environment
+
 
     public int MinBoundXCoord { get => minBoundXCoord; set => minBoundXCoord = value; }
     public int MaxBoundXCoord { get => maxBoundXCoord; set => maxBoundXCoord = value; }
@@ -25,11 +29,13 @@
     public int NumOfCubesInXDir { get => numOfCubesInXDir; set => numOfCubesInXDir = value; }
     public int NumOfCubesInZDir { get => numOfCubesInZDir; set => numOfCubesInZDir = value; }
 
-    public FloorBounds(int numCubesInXDir, int numCubesInZDir)
+    public int NumLayersTopNotDestroy { get => numLayersTopNotDestroy; set => numLayersTopNotDestroy = value; }
+
+    public void Initialize(int numCubesInXDir, int numCubesInZDir, int numLayersTopNotDestroy)
     {
         NumOfCubesInXDir = numCubesInXDir;
         NumOfCubesInZDir = numCubesInZDir;
-
+        
         if ((NumOfCubesInXDir % 2) == 0)
         {
             MinBoundXCoord = 0;
@@ -60,6 +66,8 @@
             MaxBoundZCoordLimit = numCubesInZDir - (int)(numCubesInZDir / 2);
 
         }
+        
+        NumLayersTopNotDestroy = numLayersTopNotDestroy;
     }
 
    
@@ -71,19 +79,19 @@
     public bool UpdateBounds()
     {
         bool successfulUpdate = true;
-       
-        if (MinBoundXCoord < MinBoundXCoordLimit)
+
+        if (MinBoundXCoord < MinBoundXCoordLimit - NumLayersTopNotDestroy)
         {
             MinBoundXCoord += 1;
             MaxBoundXCoord -= 1;
         }
-        if (minBoundZCoord < minBoundZCoordLimit)
+        if (minBoundZCoord < minBoundZCoordLimit - NumLayersTopNotDestroy)
         {
             MinBoundZCoord += 1;
             MaxBoundZCoord -= 1;
         }
         
-        if(MinBoundXCoord == MinBoundXCoordLimit && MinBoundZCoord == MinBoundZCoordLimit)
+        if((MinBoundXCoord == (MinBoundXCoordLimit - NumLayersTopNotDestroy)) && (MinBoundZCoord == (MinBoundZCoordLimit - NumLayersTopNotDestroy)))
         {
             successfulUpdate = false;
         }

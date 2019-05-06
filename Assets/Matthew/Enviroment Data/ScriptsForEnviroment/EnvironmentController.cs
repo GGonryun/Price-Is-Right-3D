@@ -11,16 +11,24 @@ public class EnvironmentController : MonoBehaviour, IEnvironmentController
      */
     [SerializeField]
     private Floor floor;
+
+    [SerializeField]
+    private Vector3 environmentScale = new Vector3(10,1,10);
+
+    [SerializeField] 
+    internal int numLayersTopNotDestroy = 1;
     
     /// <summary>
     /// Awake is used to initialize any variables or game state before the game starts.
     /// Awake will initialize the floor game object.
     /// </summary>
     private void Awake() {
+        
         floor = gameObject.GetComponent<Floor>();
         if(!floor){
             Debug.LogError("<Color=Red> EnvironmentController <a></a></Color> is missing a Floor component !! ", this);
         }
+
     }
 
     /// <summary>
@@ -41,8 +49,17 @@ public class EnvironmentController : MonoBehaviour, IEnvironmentController
                 Debug.LogError("<Color=Red>EnvironmentController<a></a></Color> could not initialize Floor !! ", this);
                 return false;
             }
+
+            /* Configure position and scale of floor */
+            float newPositionX = -((floor.numCubesInXDir * environmentScale.x) / 2);
+            float newPositionZ = -((floor.numCubesInZDir * environmentScale.z) / 2);
+            gameObject.transform.position = new Vector3(newPositionX, 0, newPositionZ);
+            gameObject.transform.localScale = new Vector3(environmentScale.x,environmentScale.y,environmentScale.z);
+
+            //gameObject.GetComponent<FloorBounds>().NumLayersTopNotDestroy = numLayersTopNotDestroy;
             return true;
         }
+        
     }
 
     /// <summary>
@@ -87,7 +104,25 @@ public class EnvironmentController : MonoBehaviour, IEnvironmentController
         }
         
         return floor.UpdateBounds(); 
-        
     }
 
+    public bool PaintRandom(){
+        floor.UpdateRandomDeleteList();
+        for (int idxNum = 0; idxNum < floor.listToRandomlyDelete.Count; idxNum++)
+        {
+            GameObject go = floor.listToRandomlyDelete[idxNum];
+            go.SendMessage("ApplyColorChange"); // return bool try catch
+        }
+        return true;
+    }
+
+    public bool ReleaseRandom(){
+        for (int idxNum = 0; idxNum < floor.listToRandomlyDelete.Count; idxNum++)
+        {
+            GameObject go = floor.listToRandomlyDelete[idxNum];
+            go.SendMessage("UnfreezeConstraints", SendMessageOptions.RequireReceiver);
+            go.SendMessage("ApplyGravity", SendMessageOptions.RequireReceiver);
+        }
+        return true;
+    }
 }

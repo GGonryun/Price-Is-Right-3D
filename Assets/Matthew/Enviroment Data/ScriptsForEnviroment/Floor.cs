@@ -11,21 +11,23 @@ public class Floor : MonoBehaviour
     private GameObject floorTilePrefab;
     
     [SerializeField]
-    private int numCubesInXDir = 10;
+    internal int numCubesInXDir = 10;
 
     [SerializeField]
-    private int numCubesInZDir = 10;
+    internal int numCubesInZDir = 10;
 
     [SerializeField]
     private int height = 10;
 
-    private FloorBounds bounds = null;
+    private FloorBounds bounds;
 
     private int totalNumOfCubes;
     
     private Dictionary<Vector3, GameObject> mapOfCubes;
 
     internal List<GameObject> outerEdges;
+
+    internal List<GameObject> listToRandomlyDelete;
 
     /// <summary>
     /// This function initializes the Floor Object through setting up the correct floor bounds.
@@ -34,15 +36,17 @@ public class Floor : MonoBehaviour
     /// <returns> A boolean value to signify if the initialization was successful or not. </returns>
     public bool Initialize()
     { 
-        bounds = new FloorBounds(numCubesInXDir, numCubesInZDir);
+        bounds = gameObject.AddComponent<FloorBounds>();
         if(bounds == null){
             Debug.LogError("<Color=Red> Floor <a></a></Color> could not initialize floor bounds !! ", this);
             return false;
         }
 
+        bounds.Initialize(numCubesInXDir, numCubesInZDir, gameObject.GetComponent<EnvironmentController>().numLayersTopNotDestroy);
         totalNumOfCubes = numCubesInXDir * numCubesInZDir;
         mapOfCubes = new Dictionary<Vector3, GameObject>();
         outerEdges = new List<GameObject>(totalNumOfCubes);
+        listToRandomlyDelete = new List<GameObject>(totalNumOfCubes);
         return true;       
     }
 
@@ -83,7 +87,7 @@ public class Floor : MonoBehaviour
     /// <param name="xCoord"></param>
     /// <param name="zCoord"></param>
     /// <returns>Vector3</returns>
-    private Vector3 CreateVector3(int xCoord, int zCoord)
+    public Vector3 CreateVector3(int xCoord, int zCoord)
     {
         return new Vector3(xCoord, height, zCoord);
     }
@@ -133,6 +137,38 @@ public class Floor : MonoBehaviour
             Debug.LogError("<Color=Red> Floor <a></a></Color> couldn't UpdateListOfOuterEdgeTiles because there are no more active edges !!", this);
             return false;
         } 
+        return true;
+    }
+
+    internal bool UpdateRandomDeleteList(){
+        listToRandomlyDelete.Clear();
+        int temp;
+        int randomMinBoundX = UnityEngine.Random.Range(bounds.MinBoundXCoord, bounds.MaxBoundXCoord);
+        int randomMaxBoundX = UnityEngine.Random.Range(bounds.MinBoundXCoord, bounds.MaxBoundXCoord);
+        if (randomMinBoundX > randomMaxBoundX){
+            temp = randomMinBoundX;
+            randomMinBoundX = randomMaxBoundX;
+            randomMaxBoundX = temp;
+        }
+
+        int randomMinBoundZ = UnityEngine.Random.Range(bounds.MinBoundZCoord, bounds.MaxBoundZCoord);
+        int randomMaxBoundZ = UnityEngine.Random.Range(bounds.MinBoundZCoord, bounds.MaxBoundZCoord);
+        if (randomMinBoundZ > randomMaxBoundZ){
+            temp = randomMinBoundZ;
+            randomMinBoundZ = randomMaxBoundZ;
+            randomMaxBoundZ = temp;
+        }
+
+        for(int zIdx = randomMinBoundZ; zIdx < randomMaxBoundZ; zIdx++){
+            for(int xIdx = randomMinBoundX; xIdx < randomMaxBoundX; xIdx++){
+                Vector3 tempVector3 = CreateVector3(xIdx, zIdx);
+                if (mapOfCubes[tempVector3].activeSelf == true) // todo talk to miguel about garbage collection of floor tiles
+                {
+                    listToRandomlyDelete.Add(mapOfCubes[tempVector3]);
+                }
+            }
+        }
+
         return true;
     }
     

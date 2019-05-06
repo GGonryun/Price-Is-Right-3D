@@ -12,7 +12,7 @@ Shader "ErbGameArt/Lava" {
         _UndoEffectTexture ("UndoEffectTexture", 2D) = "black" {}
         [MaterialToggle] _Fresnel ("Fresnel", Float ) = 0
         _EmmisionStrench ("EmmisionStrench", Range(0, 8)) = 1.8
-        _Relief ("Relief", Range(0, 10)) = 0.5
+        _Relief ("Relief", Range(0, 50)) = 0.5
         _TextureChangespeed ("TextureChange speed", Range(0, 20)) = 5
         _Outlinefresnel ("Outline fresnel", Float ) = 2
     }

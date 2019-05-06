@@ -30,7 +30,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     [Tooltip("")]
     [SerializeField]
-    private float roundDelay = 10f;
+    private float roundDelay = 20f;
+
 
     #region UNITY CALLBACKS
     private void Awake()
@@ -119,7 +120,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private async void StartGame()
     {
-        environmentController.Initialize();
+        environmentController.Initialize();   
         await new WaitForSeconds(gameDelay);
         DriveEnvironment();
     }
@@ -131,9 +132,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             await new WaitForSeconds(roundDelay);
             hasNext = environmentController.Paint();
-
+            //environmentController.PaintRandom();
+        
             await new WaitForSeconds(paintDelay);
-            hasNext = environmentController.Release(); 
+            hasNext = environmentController.Release();
+            //environmentController.ReleaseRandom();
+
         }
         Debug.Log("Game Complete");
     }
