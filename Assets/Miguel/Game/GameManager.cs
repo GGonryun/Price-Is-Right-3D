@@ -132,11 +132,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             await new WaitForSeconds(roundDelay);
             hasNext = environmentController.Paint();
-            //environmentController.PaintRandom();
+            environmentController.PaintRandom(); // create bounds on max size 
         
             await new WaitForSeconds(paintDelay);
             hasNext = environmentController.Release();
-            //environmentController.ReleaseRandom();
+            environmentController.ReleaseRandom();
 
         }
         Debug.Log("Game Complete");

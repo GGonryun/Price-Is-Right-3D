@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(EnvironmentController))]
+[RequireComponent(typeof(FloorBounds))]
 public class Floor : MonoBehaviour
 {
     /*
@@ -17,7 +19,7 @@ public class Floor : MonoBehaviour
     internal int numCubesInZDir = 10;
 
     [SerializeField]
-    private int height = 10;
+    internal int height = 10;  //todo - get checked if this should be internal
 
     private FloorBounds bounds;
 
@@ -28,6 +30,8 @@ public class Floor : MonoBehaviour
     internal List<GameObject> outerEdges;
 
     internal List<GameObject> listToRandomlyDelete;
+
+    private List<Vector3> listToNotDelete;
 
     /// <summary>
     /// This function initializes the Floor Object through setting up the correct floor bounds.
@@ -42,11 +46,14 @@ public class Floor : MonoBehaviour
             return false;
         }
 
-        bounds.Initialize(numCubesInXDir, numCubesInZDir, gameObject.GetComponent<EnvironmentController>().numLayersTopNotDestroy);
+        bounds.Initialize(numCubesInXDir, numCubesInZDir, gameObject.GetComponent<EnvironmentController>().numLayersTopNotDestroy);  //todo - is there a better way to do this?
         totalNumOfCubes = numCubesInXDir * numCubesInZDir;
         mapOfCubes = new Dictionary<Vector3, GameObject>();
         outerEdges = new List<GameObject>(totalNumOfCubes);
         listToRandomlyDelete = new List<GameObject>(totalNumOfCubes);
+        listToNotDelete = new List<Vector3>();
+        GenerateListToNotDelete();
+
         return true;       
     }
 
@@ -105,6 +112,53 @@ public class Floor : MonoBehaviour
         return cube;
     }
 
+    private void GenerateListToNotDelete(){ //todo - still need to incorporate num of layers not to destroy
+        int oddMiddleX = 0;
+        List<int> evenMiddleX = new List<int>();
+        int oddMiddleZ = 0;
+        List<int> evenMiddleZ = new List<int>();
+        bool numCubesInXDirEven = numCubesInXDir % 2 == 0;
+        bool numCubesInZDirEven = numCubesInZDir % 2 == 0;
+
+        if(numCubesInXDirEven == false){
+            oddMiddleX = numCubesInXDir /2;
+        }
+        else if(numCubesInXDirEven == true){
+            evenMiddleX.Add(numCubesInXDir /2);
+            evenMiddleX.Add((numCubesInXDir /2)-1);
+        }
+
+        if(numCubesInZDirEven == false){
+            oddMiddleZ = numCubesInZDir /2;
+        }
+        else if(numCubesInZDirEven){
+            evenMiddleZ.Add(numCubesInZDir /2);
+            evenMiddleZ.Add((numCubesInZDir /2)-1);
+        }
+
+
+        if(numCubesInXDirEven == true && numCubesInZDirEven == true){
+            listToNotDelete.Add(new Vector3(evenMiddleX[0], height, evenMiddleZ[0]));
+            listToNotDelete.Add(new Vector3(evenMiddleX[1], height, evenMiddleZ[0]));
+            listToNotDelete.Add(new Vector3(evenMiddleX[0], height, evenMiddleZ[1]));
+            listToNotDelete.Add(new Vector3(evenMiddleX[1], height, evenMiddleZ[1]));
+
+
+        }
+        else if(numCubesInXDirEven == false && numCubesInZDirEven == true){
+            listToNotDelete.Add(new Vector3(oddMiddleX, height, evenMiddleZ[0]));
+            listToNotDelete.Add(new Vector3(oddMiddleX, height, evenMiddleZ[1]));
+
+        }
+        else if(numCubesInXDirEven == true && numCubesInZDirEven == false){
+             listToNotDelete.Add(new Vector3(evenMiddleX[0], height, oddMiddleZ));
+        }
+        else if(numCubesInXDirEven == false && numCubesInZDirEven == false){
+            listToNotDelete.Add(new Vector3(oddMiddleX, height, oddMiddleZ));
+        }
+        
+    }
+
     /// <summary>
     /// This function generates a list of game objects that are current edges of the floor.
     /// </summary>
@@ -115,10 +169,16 @@ public class Floor : MonoBehaviour
         {
             for (int currentXIdx = bounds.MinBoundXCoord; currentXIdx < bounds.MaxBoundXCoord; currentXIdx++)
             {
-                if (currentZIdx == bounds.MinBoundZCoord || currentZIdx == bounds.MaxBoundZCoord - 1)
+                // if(currentXIdx >= (bounds.MaxBoundXCoordLimit - bounds.NumLayersTopNotDestroy) && currentXIdx <= (bounds.MaxBoundXCoordLimit + bounds.NumLayersTopNotDestroy)){ -1?
+                //     continue;
+                // }
+                // else if(currentZIdx >= (bounds.MaxBoundZCoordLimit - bounds.NumLayersTopNotDestroy) && currentZIdx <= (bounds.MaxBoundZCoordLimit + bounds.NumLayersTopNotDestroy)){
+                //     continue;
+                // }
+                 if (currentZIdx == bounds.MinBoundZCoord || currentZIdx == bounds.MaxBoundZCoord - 1)
                 {
                     Vector3 tempVector3 = CreateVector3(currentXIdx, currentZIdx);
-                    if (mapOfCubes[tempVector3].activeSelf == true) // todo talk to miguel about garbage collection of floor tiles
+                    if ((mapOfCubes[tempVector3].activeSelf == true) && !listToNotDelete.Contains(tempVector3)) // todo talk to miguel about garbage collection of floor tiles
                     {
                         outerEdges.Add(mapOfCubes[tempVector3]);
                     }
@@ -126,7 +186,7 @@ public class Floor : MonoBehaviour
                 else if (currentXIdx == bounds.MinBoundXCoord || currentXIdx == bounds.MaxBoundXCoord - 1)
                 {
                     Vector3 tempVector3 = CreateVector3(currentXIdx, currentZIdx);
-                    if (mapOfCubes[tempVector3].activeSelf == true) // todo talk to miguel about garbage collection of floor tiles
+                    if ((mapOfCubes[tempVector3].activeSelf == true) && !listToNotDelete.Contains(tempVector3)) // todo talk to miguel about garbage collection of floor tiles
                     {
                         outerEdges.Add(mapOfCubes[tempVector3]);
                     }
@@ -150,6 +210,9 @@ public class Floor : MonoBehaviour
             randomMinBoundX = randomMaxBoundX;
             randomMaxBoundX = temp;
         }
+        if (randomMaxBoundX - randomMinBoundX > 3){
+            randomMaxBoundX = randomMinBoundX + 3; 
+        }
 
         int randomMinBoundZ = UnityEngine.Random.Range(bounds.MinBoundZCoord, bounds.MaxBoundZCoord);
         int randomMaxBoundZ = UnityEngine.Random.Range(bounds.MinBoundZCoord, bounds.MaxBoundZCoord);
@@ -158,17 +221,25 @@ public class Floor : MonoBehaviour
             randomMinBoundZ = randomMaxBoundZ;
             randomMaxBoundZ = temp;
         }
+        if (randomMaxBoundZ - randomMinBoundZ > 3){
+            randomMaxBoundZ = randomMinBoundZ + 3; 
+        }
 
         for(int zIdx = randomMinBoundZ; zIdx < randomMaxBoundZ; zIdx++){
             for(int xIdx = randomMinBoundX; xIdx < randomMaxBoundX; xIdx++){
                 Vector3 tempVector3 = CreateVector3(xIdx, zIdx);
-                if (mapOfCubes[tempVector3].activeSelf == true) // todo talk to miguel about garbage collection of floor tiles
-                {
-                    listToRandomlyDelete.Add(mapOfCubes[tempVector3]);
+                if ((mapOfCubes[tempVector3].activeSelf == true) && !listToNotDelete.Contains(tempVector3)) // todo talk to miguel about garbage collection of floor tiles
+                {   
+                    try{
+                        listToRandomlyDelete.Add(mapOfCubes[tempVector3]);
+                    }
+                    catch(System.Exception e){
+                        Debug.Log("Could Not randomly delete a cube");
+                    }
                 }
             }
         }
-
+      
         return true;
     }
     

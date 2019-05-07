@@ -39,37 +39,36 @@ public class FloorBounds : MonoBehaviour {
         if ((NumOfCubesInXDir % 2) == 0)
         {
             MinBoundXCoord = 0;
-            MaxBoundXCoord = numCubesInXDir;
-            MinBoundXCoordLimit = (int)(numCubesInXDir / 2);
-            MaxBoundXCoordLimit = numCubesInXDir - (int)(numCubesInXDir / 2); // exclusive; maxBoundX should not decrement if maxBoundX is == maxBoundxLimit
+            MaxBoundXCoord = NumOfCubesInXDir;
+            MinBoundXCoordLimit = (int)(NumOfCubesInXDir / 2);
+            MaxBoundXCoordLimit = NumOfCubesInXDir - (int)(NumOfCubesInXDir / 2); // exclusive; maxBoundX should not decrement if maxBoundX is == maxBoundxLimit
         }
         else
         {
             MinBoundXCoord = 0;
-            MaxBoundXCoord = numCubesInXDir;
-            MinBoundXCoordLimit = (int)(numCubesInXDir / 2) + 1;
-            MaxBoundXCoordLimit = (int)(numCubesInXDir / 2) + 1;
+            MaxBoundXCoord = NumOfCubesInXDir;
+            MinBoundXCoordLimit = (int)(NumOfCubesInXDir / 2) + 1;
+            MaxBoundXCoordLimit = (int)(NumOfCubesInXDir / 2) + 1;
         }
 
         if ((NumOfCubesInZDir % 2) == 0)
         {
             MinBoundZCoord = 0;
-            MaxBoundZCoord = numCubesInZDir;
-            MinBoundZCoordLimit = (int)(numCubesInZDir / 2);
-            MaxBoundZCoordLimit = numCubesInZDir - (int)(numCubesInZDir / 2);
+            MaxBoundZCoord = NumOfCubesInZDir;
+            MinBoundZCoordLimit = (int)(NumOfCubesInZDir / 2);
+            MaxBoundZCoordLimit = NumOfCubesInZDir - (int)(NumOfCubesInZDir / 2);
         }
         else
         {
             MinBoundZCoord = 0;
-            MaxBoundZCoord = numCubesInZDir;
-            MinBoundZCoordLimit = (int)(numCubesInZDir / 2) + 1;
-            MaxBoundZCoordLimit = numCubesInZDir - (int)(numCubesInZDir / 2);
+            MaxBoundZCoord = NumOfCubesInZDir;
+            MinBoundZCoordLimit = (int)(NumOfCubesInZDir / 2) + 1;
+            MaxBoundZCoordLimit = NumOfCubesInZDir - (int)(NumOfCubesInZDir / 2);
 
         }
         
         NumLayersTopNotDestroy = numLayersTopNotDestroy;
     }
-
    
 
     /// <summary>
@@ -80,18 +79,18 @@ public class FloorBounds : MonoBehaviour {
     {
         bool successfulUpdate = true;
 
-        if (MinBoundXCoord < MinBoundXCoordLimit - NumLayersTopNotDestroy)
+        if (MinBoundXCoord < MinBoundXCoordLimit)
         {
             MinBoundXCoord += 1;
             MaxBoundXCoord -= 1;
         }
-        if (minBoundZCoord < minBoundZCoordLimit - NumLayersTopNotDestroy)
+        if (MinBoundZCoord < MinBoundZCoordLimit)
         {
             MinBoundZCoord += 1;
             MaxBoundZCoord -= 1;
         }
         
-        if((MinBoundXCoord == (MinBoundXCoordLimit - NumLayersTopNotDestroy)) && (MinBoundZCoord == (MinBoundZCoordLimit - NumLayersTopNotDestroy)))
+        if((MinBoundXCoord == MinBoundXCoordLimit) && (MinBoundZCoord == MinBoundZCoordLimit))
         {
             successfulUpdate = false;
         }

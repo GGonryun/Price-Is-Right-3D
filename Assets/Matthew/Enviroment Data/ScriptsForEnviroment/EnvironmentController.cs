@@ -16,7 +16,7 @@ public class EnvironmentController : MonoBehaviour, IEnvironmentController
     private Vector3 environmentScale = new Vector3(10,1,10);
 
     [SerializeField] 
-    internal int numLayersTopNotDestroy = 1;
+    internal int numLayersTopNotDestroy = 1;  //todo - check if I should use internal
     
     /// <summary>
     /// Awake is used to initialize any variables or game state before the game starts.
@@ -49,18 +49,28 @@ public class EnvironmentController : MonoBehaviour, IEnvironmentController
                 Debug.LogError("<Color=Red>EnvironmentController<a></a></Color> could not initialize Floor !! ", this);
                 return false;
             }
+            UpdateFloorPosition();
+            UpdateFloorScale();    
 
-            /* Configure position and scale of floor */
-            float newPositionX = -((floor.numCubesInXDir * environmentScale.x) / 2);
-            float newPositionZ = -((floor.numCubesInZDir * environmentScale.z) / 2);
-            gameObject.transform.position = new Vector3(newPositionX, 0, newPositionZ);
-            gameObject.transform.localScale = new Vector3(environmentScale.x,environmentScale.y,environmentScale.z);
-
-            //gameObject.GetComponent<FloorBounds>().NumLayersTopNotDestroy = numLayersTopNotDestroy;
+            //gameObject.GetComponent<FloorBounds>().NumLayersTopNotDestroy = numLayersTopNotDestroy; // todo - ask if this is how I should implement it.
             return true;
         }
         
     }
+
+    private void UpdateFloorScale()
+    {
+        gameObject.transform.localScale = new Vector3(environmentScale.x,environmentScale.y,environmentScale.z);
+    }
+
+    private void UpdateFloorPosition()
+    {
+        /* Configure position and scale of floor */
+        float newPositionX = -((floor.numCubesInXDir * environmentScale.x) / 2);
+        float newPositionZ = -((floor.numCubesInZDir * environmentScale.z) / 2);
+        gameObject.transform.position = new Vector3(newPositionX, gameObject.transform.position.y, newPositionZ); //todo - do i make height internal
+    }
+    
 
     /// <summary>
     /// Changes the color of each outer edge floor tile
