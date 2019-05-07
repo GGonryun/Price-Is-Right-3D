@@ -1,12 +1,16 @@
 fileFormatVersion: 2
-guid: 166dfe22956ef0341b28e18d0499e363
+guid: c726d73a59caf61478a6037a2408353f
 labels:
 - ExitGames
 - PUN
 - Photon
 - Networking
 MonoImporter:
+  externalObjects: {}
   serializedVersion: 2
   defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
