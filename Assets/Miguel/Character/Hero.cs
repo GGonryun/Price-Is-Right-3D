@@ -9,6 +9,10 @@ public sealed class Hero : MonoBehaviourPun
     public float Multiplier => this.impactDetector.Multiplier;
     public float Height => this.characterController.height;
 
+    [Tooltip("")]
+    [SerializeField]
+    private ParticleSystem particleSystem = null;
+
     [Tooltip("The hero's user interface prefab")]
     [SerializeField]
     private GameObject heroUserInterfacePrefab = null;
@@ -23,7 +27,13 @@ public sealed class Hero : MonoBehaviourPun
 
     public void Move(Vector3 movement) => characterController.Move(movement);
     public void ShrinkSticker() => playerSticker.Shrink();
-   
+    public void LaunchParticles()
+    {
+        if (particleSystem.isPlaying)
+            particleSystem.Clear();
+        particleSystem.Play();
+    }
+
     #region CALLBACKS
     public void DeactivatePlayer(object sender, System.EventArgs e)
     {
@@ -48,11 +58,15 @@ public sealed class Hero : MonoBehaviourPun
         if (!impactDetector)
             Debug.LogError("<Color=Red> Hero <a></a></Color>is missing an ImpactDetection component !! ", this);
         animationController = GetComponent<AnimationController>();
-        if(!animationController)
+        if (!animationController)
             Debug.LogError("<Color=Red> Hero <a></a></Color>is missing an AnimationController component !! ", this);
         characterController = GetComponent<CharacterController>();
-        if(!characterController)
+        if (!characterController)
             Debug.LogError("<Color=Red> Hero <a></a></Color>is missing a CharacterController component !! ", this);
+
+
+        if (!particleSystem)
+            Debug.LogError("<Color=Red> Hero <a></a></Color>is missing a ParticleSystem component !! ", this);
     }
 
     private void OnEnable()

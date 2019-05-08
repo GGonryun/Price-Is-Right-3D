@@ -71,8 +71,18 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
     #endregion PUN CALLBACKS
 
     #region PRIVATES
+    [PunRPC]
+    private void Bleed(PhotonMessageInfo info)
+    {
+        if(photonView.IsMine)
+        {
+            hero.LaunchParticles();
+        }
+    }
+
     private float CalculateKnockback(Transform target, float multiplier, float influence)
     {
+        photonView.RPC("Bleed", RpcTarget.AllViaServer);
         Vector3 heading = target.forward;
         heading.y *= 0f;
         currentMultiplier += multiplier;
