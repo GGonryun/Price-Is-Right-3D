@@ -74,10 +74,7 @@ public class ImpactDetector : MonoBehaviourPun, IPunObservable
     [PunRPC]
     private void Bleed(PhotonMessageInfo info)
     {
-        if(photonView.IsMine)
-        {
-            hero.LaunchParticles();
-        }
+        hero.LaunchParticles();
     }
 
     private float CalculateKnockback(Transform target, float multiplier, float influence)

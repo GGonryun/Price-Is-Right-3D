@@ -136,8 +136,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         
             await new WaitForSeconds(paintDelay);
             hasNext = environmentController.Release();
-            environmentController.ReleaseRandom();
-
+            //environmentController.ReleaseRandom();
         }
         Debug.Log("Game Complete");
     }
