@@ -235,7 +235,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public void OnInstructionsSelected()
     {
-        SetActivePanel(creditPanel.name);
+        SetActivePanel(instructionsRoomPanel.name);
     }
 
     public void OnReturnToMenu()
