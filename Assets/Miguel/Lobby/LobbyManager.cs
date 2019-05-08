@@ -6,6 +6,25 @@ using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
+    #region MAIN MENU
+    [Header("Main Menu Panel")]
+    [Tooltip("")]
+    [SerializeField]
+    private GameObject mainMenuPanel = null;
+    [Tooltip("")]
+    [SerializeField]
+    private Button mainMenuPlayButton = null;
+    [Tooltip("")]
+    [SerializeField]
+    private Button mainMenuCreditsButton = null;
+    [Tooltip("")]
+    [SerializeField]
+    private Button mainMenuInstructionsButton = null;
+    [Tooltip("")]
+    [SerializeField]
+    private Button mainMenuExitButton = null;
+    #endregion
+    #region LOGIN
     [Header("Login Panel")]
     [Tooltip("")]
     [SerializeField]
@@ -16,7 +35,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [Tooltip("")]
     [SerializeField]
     private Button loginButton = null;
-
+    #endregion
+    #region JOIN ROOM
     [Header("Join Room Panel")]
     [Tooltip("")]
     [SerializeField]
@@ -30,7 +50,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [Tooltip("")]
     [SerializeField]
     private Button joinRoomButton = null;
-
+    #endregion
+    #region ACTIVE ROOM
     [Header("Active Room Panel")]
     [Tooltip("")]
     [SerializeField]
@@ -44,40 +65,71 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [Tooltip("")]
     [SerializeField]
     private Text playerNameTextPrefab = null;
-
-    [Header("Testing Character Select Panel")]
+    #endregion
     [Tooltip("")]
     [SerializeField]
     private Dropdown characterSelectDropdown = null;
+    #region INSTRUCTIONS
+    [Header("Instructions Room Panel")]
+    [Tooltip("")]
+    [SerializeField]
+    private GameObject instructionsRoomPanel = null;
+    [Tooltip("")]
+    [SerializeField]
+    private Button instructionsExitButton = null;
+    #endregion
+    #region CREDITS
+    [Header("Credits Panel")]
+    [Tooltip("")]
+    [SerializeField]
+    private GameObject creditPanel = null;
+    [Tooltip("")]
+    [SerializeField]
+    private Button creditsExitButton = null;
+    #endregion
 
     #region UNITY CALLBACKS
+
     private void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
         playerNameInputField.text = $"Player #{Random.Range(0, System.Int32.MaxValue)}";
-        SetActivePanel(loginPanel.name);
+        SetActivePanel(mainMenuPanel.name);
     }
 
     public override void OnEnable()
     {
         base.OnEnable();
+        mainMenuPlayButton.onClick.AddListener(OnClickStart);
+        mainMenuCreditsButton.onClick.AddListener(OnCreditsSelected);
+        mainMenuInstructionsButton.onClick.AddListener(OnInstructionsSelected);
+        mainMenuExitButton.onClick.AddListener(OnQuitGame);
+
         loginButton.onClick.AddListener(OnClickLogin);
         joinRoomButton.onClick.AddListener(OnClickJoin);
         enterGameButton.onClick.AddListener(OnClickEnter);
         characterSelectDropdown.onValueChanged.AddListener(OnCharacterSelected);
+
+        instructionsExitButton.onClick.AddListener(OnReturnToMenu);
+        creditsExitButton.onClick.AddListener(OnReturnToMenu);
     }
 
     public override void OnDisable()
     {
         base.OnDisable();
+        mainMenuPlayButton.onClick.RemoveListener(OnClickStart);
+        mainMenuCreditsButton.onClick.RemoveListener(OnCreditsSelected);
+        mainMenuInstructionsButton.onClick.RemoveListener(OnInstructionsSelected);
+        mainMenuExitButton.onClick.RemoveListener(OnQuitGame);
+
         loginButton.onClick.RemoveListener(OnClickLogin);
         joinRoomButton.onClick.RemoveListener(OnClickJoin);
         enterGameButton.onClick.RemoveListener(OnClickEnter);
         characterSelectDropdown.onValueChanged.RemoveListener(OnCharacterSelected);
 
+        instructionsExitButton.onClick.RemoveListener(OnReturnToMenu);
+        creditsExitButton.onClick.RemoveListener(OnReturnToMenu);
     }
-
-    
     #endregion UNITY CALLBACKS
 
     #region PUN CALLBACKS
@@ -144,6 +196,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     #endregion PUN CALLBACKS
 
     #region UI CALLBACKS
+    public void OnClickStart()
+    {
+        SetActivePanel(loginPanel.name);
+    }
+
     public void OnClickLogin()
     {
         string playerName = playerNameInputField.text;
@@ -170,14 +227,41 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
 
     public void OnCharacterSelected(int index) => Settings.Instance.Character = Characters.Get(characterSelectDropdown.options[index].text);
-    #endregion UI CALLBACKS
+    
+    public void OnCreditsSelected()
+    {
+        SetActivePanel(creditPanel.name);
+    }
 
-    #region PRIVATES
+    public void OnInstructionsSelected()
+    {
+        SetActivePanel(creditPanel.name);
+    }
+
+    public void OnReturnToMenu()
+    {
+        SetActivePanel(mainMenuPanel.name);
+    }
+
+    public void OnQuitGame()
+    {
+#if UNITY_EDITOR
+        Debug.Log("we quit boyz");
+#else
+        Application.Quit();
+#endif
+    }
+#endregion UI CALLBACKS
+
+#region PRIVATES
     private void SetActivePanel(string name)
     {
+        mainMenuPanel.SetActive(name.Equals(mainMenuPanel.name));
         loginPanel.SetActive(name.Equals(loginPanel.name));
         joinRoomPanel.SetActive(name.Equals(joinRoomPanel.name));
         activeRoomPanel.SetActive(name.Equals(activeRoomPanel.name));
+        instructionsRoomPanel.SetActive(name.Equals(instructionsRoomPanel.name));
+        creditPanel.SetActive(name.Equals(creditPanel.name));
     }
 
     private void CreateRoom()
@@ -230,5 +314,5 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     private const string _version = "3";
     private const short _errorRoomDoesNotExist = 32760;
     [System.NonSerialized] private Dictionary<string, Text> playerList = new Dictionary<string, Text>(8);
-    #endregion PRIVATES
+#endregion PRIVATES
 }

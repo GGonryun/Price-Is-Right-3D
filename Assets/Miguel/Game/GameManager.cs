@@ -30,7 +30,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     [Tooltip("")]
     [SerializeField]
-    private float roundDelay = 10f;
+    private float roundDelay = 20f;
+
 
     #region UNITY CALLBACKS
     private void Awake()
@@ -47,7 +48,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     /// </summary>
     private void Start()
     {
-        //StartGame();
+        StartGame();
 
         GameObject _go = PhotonNetwork.Instantiate(Settings.Instance.Character.ToString(), new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
     }
@@ -119,7 +120,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private async void StartGame()
     {
-        environmentController.Initialize();
+        environmentController.Initialize();   
         await new WaitForSeconds(gameDelay);
         DriveEnvironment();
     }
@@ -131,9 +132,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             await new WaitForSeconds(roundDelay);
             hasNext = environmentController.Paint();
-
+            environmentController.PaintRandom(); // create bounds on max size 
+        
             await new WaitForSeconds(paintDelay);
             hasNext = environmentController.Release();
+            environmentController.ReleaseRandom();
+
         }
         Debug.Log("Game Complete");
     }
